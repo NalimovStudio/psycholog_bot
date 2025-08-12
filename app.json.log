@@ -1,0 +1,8 @@
+{"asctime": "2025-08-13 01:29:46,246", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Start polling"}
+{"asctime": "2025-08-13 01:29:46,512", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Run polling for bot @nalimov_skamer_bot id=8376806252 - 'nalimov_skamer'"}
+{"asctime": "2025-08-13 01:29:53,702", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.commands", "message": "NEW MESSAGE FROM USER"}
+{"asctime": "2025-08-13 01:29:53,704", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223109 is handled. Duration 1078 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 01:29:57,008", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Polling stopped"}
+{"asctime": "2025-08-13 01:29:57,009", "levelname": "ERROR", "name": "aiogram.dispatcher", "message": "Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected"}
+{"asctime": "2025-08-13 01:29:57,009", "levelname": "WARNING", "name": "aiogram.dispatcher", "message": "Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8376806252)"}
+{"asctime": "2025-08-13 01:29:57,238", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Polling stopped for bot @nalimov_skamer_bot id=8376806252 - 'nalimov_skamer'"}
