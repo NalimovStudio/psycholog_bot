@@ -35,7 +35,7 @@ async def handle_ps_s2_goal(message: Message, state: FSMContext):
     await state.set_state(SupportStates.PROBLEM_S3_OPTIONS)
 
     await message.answer("Спасибо. Я подумаю и предложу 3 варианта действий. Минутку...")
-
+    #TODO Тут нужно решить заглушку и поставить нейронку на создании 3 вариантой решении проблемы
     solutions = [
         {
             "option": "Поговорить с другом о том, что беспокоит.",

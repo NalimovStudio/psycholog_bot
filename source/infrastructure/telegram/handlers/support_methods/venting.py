@@ -40,5 +40,5 @@ async def handle_stop_venting(message: Message, state: FSMContext):
 async def handle_venting_message(message: Message, state: FSMContext):
     logger.info(f"User {message.from_user.id} is venting. Msg: '{message.text[:30]}...'")
 
-    response_text = "Спасибо, что делишься. Я рядом и слышу тебя."
+    response_text = "Спасибо, что делишься. Я рядом и слышу тебя." #TODO, Пока стоит заглушка, нужно сделать бота, что бы принимал сообщения
     await message.answer(response_text)

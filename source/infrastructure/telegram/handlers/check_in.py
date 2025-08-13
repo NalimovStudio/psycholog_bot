@@ -19,7 +19,7 @@ async def handle_check_in(message: Message, state: FSMContext):
     """
     logger.info(f"User {message.from_user.id} in CHECK_IN. Msg: '{message.text[:30]}...'")
 
-    # 1. Классифицируем намерение с помощью заглушки
+    # 1. Классифицируем намерение с помощью заглушки # TODO Решить заглушку
     #classification = await classify_intent(message.text) 
     classification = {
         "intent": "other",
