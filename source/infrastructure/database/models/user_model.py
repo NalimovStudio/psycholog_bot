@@ -1,29 +1,12 @@
 from datetime import datetime
-from enum import Enum
 from typing import Optional
 
 from sqlalchemy import String, DateTime, ForeignKey, Integer
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from source.core.enum import SubscriptionType, UserType
 from source.infrastructure.database.models.base_model import BaseModel, TimestampCreatedAtMixin
-
-
-class SubscriptionType(str, Enum):
-    """
-    Типы подписки пользователя.
-    """
-    FREE = "free"
-    DEFAULT = "default"
-    PRO = "pro"
-
-
-class UserType(str, Enum):
-    """
-    Типы пользователя.
-    """
-    USER = "user"
-    ADMIN = "admin"
 
 
 class User(BaseModel):

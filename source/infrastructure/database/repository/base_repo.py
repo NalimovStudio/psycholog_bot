@@ -11,3 +11,15 @@ class BaseRepository(Generic[T]):
     def __init__(self, model: Type[T], session: AsyncSession):
         self.model = model
         self.session = session
+
+    def create(self) -> T:
+        ...
+
+    def update(self) -> T:
+        ...
+
+    def delete(self) -> T:
+        ...
+
+    def get(self) -> T:
+        ...
