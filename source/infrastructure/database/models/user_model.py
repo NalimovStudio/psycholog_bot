@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from sqlalchemy import String, DateTime, ForeignKey
+from sqlalchemy import String, DateTime, ForeignKey, Integer
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -33,6 +33,9 @@ class User(BaseModel):
     username: Mapped[str] = mapped_column(String, comment="telegram username")
     first_name: Mapped[Optional[str]] = mapped_column(String, comment="telegram first name")
     last_name: Mapped[Optional[str]] = mapped_column(String, comment="telegram last name")
+
+    dialogs_completed_today: Mapped[Optional[int]] = mapped_column(Integer, comment="Количество завершенных диалогов сегодня")
+    dialogs_completed: Mapped[Optional[int]] = mapped_column(Integer, comment="Количество завершенных диалогов за все время")
 
     user_type: Mapped[UserType] = mapped_column(
         postgresql.ENUM(UserType, name="user_type_enum", create_type=True),
@@ -67,4 +70,4 @@ class UserLoggingRequests(BaseModel, TimestampCreatedAtMixin):
         "User", back_populates="logging_requests"
     )
 
-    user_request: Mapped[str] = mapped_column(String, comment="Сообщение пользователя")
+    message: Mapped[str] = mapped_column(String, comment="Сообщение пользователя")
