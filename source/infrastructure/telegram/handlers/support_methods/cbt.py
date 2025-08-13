@@ -1,0 +1,81 @@
+import logging
+
+from aiogram import F, Router
+from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery, Message
+
+from source.infrastructure.telegram.callbacks.method_callbacks import MethodCallback
+from source.infrastructure.telegram.keyboards.keyboards import get_main_keyboard
+from source.infrastructure.telegram.states.user_states import SupportStates
+
+logger = logging.getLogger(__name__)
+router = Router(name=__name__)
+
+
+@router.callback_query(MethodCallback.filter(F.name == "cbt"), SupportStates.METHOD_SELECT)
+async def handle_cbt_method(query: CallbackQuery, state: FSMContext):
+    logger.info(f"User {query.from_user.id} chose 'cbt' method.")
+    await state.set_state(SupportStates.CBT_S1_SITUATION)
+    text = "Хорошо, давай начнем вести дневник. Опиши ситуацию одним-двумя предложениями: что произошло?"
+    await query.message.edit_text(text)
+    await query.answer()
+
+
+@router.message(SupportStates.CBT_S1_SITUATION)
+async def handle_cbt_s1_situation(message: Message, state: FSMContext):
+    await state.update_data(cbt_situation=message.text)
+    await state.set_state(SupportStates.CBT_S2_EMOTIONS)
+    text = "Понял. Какие эмоции ты испытал? Назови их и оцени интенсивность от 0 до 100."
+    await message.answer(text)
+
+
+@router.message(SupportStates.CBT_S2_EMOTIONS)
+async def handle_cbt_s2_emotions(message: Message, state: FSMContext):
+    await state.update_data(cbt_emotions=message.text)
+    await state.set_state(SupportStates.CBT_S3_THOUGHT)
+    text = "Спасибо. Какая автоматическая мысль промелькнула у тебя в голове в тот момент?"
+    await message.answer(text)
+
+
+@router.message(SupportStates.CBT_S3_THOUGHT)
+async def handle_cbt_s3_thought(message: Message, state: FSMContext):
+    await state.update_data(cbt_thought=message.text)
+    await state.set_state(SupportStates.CBT_S4_DISTORTIONS)
+    # TODO: Добавить клавиатуру для выбора когнитивных искажений
+    text = "Хорошо. А теперь подумай, были ли в этой мысли когнитивные искажения? Например, 'чтение мыслей' или 'катастрофизация'. Можешь перечислить их."
+    await message.answer(text)
+
+
+@router.message(SupportStates.CBT_S4_DISTORTIONS)
+async def handle_cbt_s4_distortions(message: Message, state: FSMContext):
+    await state.update_data(cbt_distortions=message.text)
+    await state.set_state(SupportStates.CBT_S5_EVIDENCE)
+    text = "Принято. Какие есть доказательства, подтверждающие эту мысль? А какие — опровергающие?"
+    await message.answer(text)
+
+
+@router.message(SupportStates.CBT_S5_EVIDENCE)
+async def handle_cbt_s5_evidence(message: Message, state: FSMContext):
+    await state.update_data(cbt_evidence=message.text)
+    await state.set_state(SupportStates.CBT_S6_ALTERNATIVE)
+    text = "Отлично. А теперь попробуй сформулировать альтернативную, более сбалансированную мысль."
+    await message.answer(text)
+
+
+@router.message(SupportStates.CBT_S6_ALTERNATIVE)
+async def handle_cbt_s6_alternative(message: Message, state: FSMContext):
+    await state.update_data(cbt_alternative=message.text)
+    await state.set_state(SupportStates.CBT_S7_RERATING)
+    text = "Супер. А теперь вернемся к твоим эмоциям. Оцени их интенсивность сейчас, от 0 до 100."
+    await message.answer(text)
+
+
+@router.message(SupportStates.CBT_S7_RERATING)
+async def handle_cbt_s7_rerating(message: Message, state: FSMContext):
+    await state.update_data(cbt_rerating=message.text)
+    cbt_data = await state.get_data()
+    logger.info(f"User {message.from_user.id} finished CBT entry: {cbt_data}")
+    # TODO: Добавить логику сохранения записи в БД (через application-слой)
+    await state.clear()
+    text = "Спасибо, мы завершили запись в дневнике. Это был важный шаг. Я сохраню эту запись, если ты не против.\n\nВозвращаю тебя в главное меню."
+    await message.answer(text, reply_markup=get_main_keyboard())

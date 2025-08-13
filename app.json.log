@@ -6,3 +6,134 @@
 {"asctime": "2025-08-13 01:29:57,009", "levelname": "ERROR", "name": "aiogram.dispatcher", "message": "Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected"}
 {"asctime": "2025-08-13 01:29:57,009", "levelname": "WARNING", "name": "aiogram.dispatcher", "message": "Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8376806252)"}
 {"asctime": "2025-08-13 01:29:57,238", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Polling stopped for bot @nalimov_skamer_bot id=8376806252 - 'nalimov_skamer'"}
+{"asctime": "2025-08-13 03:03:54,367", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Start polling"}
+{"asctime": "2025-08-13 03:03:54,633", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Run polling for bot @nalimov_skamer_bot id=8376806252 - 'nalimov_skamer'"}
+{"asctime": "2025-08-13 03:04:01,675", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.start", "message": "User 1758719447 started the bot."}
+{"asctime": "2025-08-13 03:04:01,678", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223110 is handled. Duration 1078 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:04:08,297", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223111 is handled. Duration 297 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:04:10,651", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223112 is not handled. Duration 16 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:04:23,630", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223113 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:04:30,121", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "User 1758719447 in CHECK_IN. Msg: '\u0445\u0443\u0435\u0432\u043e...'"}
+{"asctime": "2025-08-13 03:04:30,121", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "No risk for user 1758719447. Moving to METHOD_SELECT."}
+{"asctime": "2025-08-13 03:04:30,401", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223114 is handled. Duration 281 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:04:36,131", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.problem_solving", "message": "User 1758719447 chose 'problem' method."}
+{"asctime": "2025-08-13 03:04:36,715", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223115 is handled. Duration 594 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:04:40,751", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223116 is handled. Duration 296 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:04:45,984", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223117 is handled. Duration 578 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:04:50,741", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223118 is handled. Duration 547 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:04:58,641", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223119 is handled. Duration 312 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:04,839", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.problem_solving", "message": "User 1758719447 finished Problem-Solving entry: {'problem_definition': '\u0438\u0434\u0438 \u043d\u0430\u0445\u0443\u0439', 'problem_goal': '\u0445\u0443\u0439 \u0437\u043d\u0430\u0435\u0442', 'solutions': [{'option': '\u041f\u043e\u0433\u043e\u0432\u043e\u0440\u0438\u0442\u044c \u0441 \u0434\u0440\u0443\u0433\u043e\u043c \u043e \u0442\u043e\u043c, \u0447\u0442\u043e \u0431\u0435\u0441\u043f\u043e\u043a\u043e\u0438\u0442.', 'pros': '\u041f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0430, \u0434\u0440\u0443\u0433\u043e\u0439 \u0432\u0437\u0433\u043b\u044f\u0434.', 'cons': '\u041c\u043e\u0436\u0435\u0442 \u043d\u0435 \u0431\u044b\u0442\u044c \u0432\u0440\u0435\u043c\u0435\u043d\u0438/\u0440\u0435\u0441\u0443\u0440\u0441\u043e\u0432 \u0443 \u0434\u0440\u0443\u0433\u0430.'}, {'option': '\u0412\u044b\u0434\u0435\u043b\u0438\u0442\u044c 30 \u043c\u0438\u043d\u0443\u0442 \u043d\u0430 \u043f\u0440\u043e\u0433\u0443\u043b\u043a\u0443 \u043d\u0430 \u0441\u0432\u0435\u0436\u0435\u043c \u0432\u043e\u0437\u0434\u0443\u0445\u0435.', 'pros': '\u0421\u043c\u0435\u043d\u0430 \u043e\u0431\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438, \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c.', 'cons': '\u041c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u043f\u043b\u043e\u0445\u0430\u044f \u043f\u043e\u0433\u043e\u0434\u0430.'}, {'option': '\u0417\u0430\u043f\u0438\u0441\u0430\u0442\u044c \u0432\u0441\u0435 \u043c\u044b\u0441\u043b\u0438 \u043e \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0435 \u043d\u0430 \u0431\u0443\u043c\u0430\u0433\u0435.', 'pros': '\u041f\u043e\u043c\u043e\u0433\u0430\u0435\u0442 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043c\u044b\u0441\u043b\u0438.', 'cons': '\u041c\u043e\u0436\u0435\u0442 \u0443\u0441\u0438\u043b\u0438\u0442\u044c \u0437\u0430\u0446\u0438\u043a\u043b\u0438\u0432\u0430\u043d\u0438\u0435 \u043d\u0430 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0435.'}], 'chosen_option': {'option': '\u041f\u043e\u0433\u043e\u0432\u043e\u0440\u0438\u0442\u044c \u0441 \u0434\u0440\u0443\u0433\u043e\u043c \u043e \u0442\u043e\u043c, \u0447\u0442\u043e \u0431\u0435\u0441\u043f\u043e\u043a\u043e\u0438\u0442.', 'pros': '\u041f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0430, \u0434\u0440\u0443\u0433\u043e\u0439 \u0432\u0437\u0433\u043b\u044f\u0434.', 'cons': '\u041c\u043e\u0436\u0435\u0442 \u043d\u0435 \u0431\u044b\u0442\u044c \u0432\u0440\u0435\u043c\u0435\u043d\u0438/\u0440\u0435\u0441\u0443\u0440\u0441\u043e\u0432 \u0443 \u0434\u0440\u0443\u0433\u0430.'}, 'problem_step': '\u0447\u0442\u043e \u043c\u043d\u0435 \u043f\u0438\u0441\u0430\u0442\u044c', 'problem_pact': '\u0441\u0435\u0433\u043e\u0434\u043d\u044f'}"}
+{"asctime": "2025-08-13 03:05:05,123", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223120 is handled. Duration 296 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:08,837", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223121 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:09,969", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223122 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:21,612", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223123 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:24,258", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223124 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:25,296", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223125 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:28,412", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223126 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:32,177", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.start", "message": "User 1758719447 started the bot."}
+{"asctime": "2025-08-13 03:05:32,178", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223127 is handled. Duration 282 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:34,589", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223128 is handled. Duration 296 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:35,532", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223129 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:39,285", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Polling stopped"}
+{"asctime": "2025-08-13 03:05:39,286", "levelname": "ERROR", "name": "aiogram.dispatcher", "message": "Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected"}
+{"asctime": "2025-08-13 03:05:39,287", "levelname": "WARNING", "name": "aiogram.dispatcher", "message": "Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8376806252)"}
+{"asctime": "2025-08-13 03:05:39,473", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Polling stopped for bot @nalimov_skamer_bot id=8376806252 - 'nalimov_skamer'"}
+{"asctime": "2025-08-13 03:05:46,273", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Start polling"}
+{"asctime": "2025-08-13 03:05:46,539", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Run polling for bot @nalimov_skamer_bot id=8376806252 - 'nalimov_skamer'"}
+{"asctime": "2025-08-13 03:05:50,199", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.start", "message": "User 1758719447 started the bot."}
+{"asctime": "2025-08-13 03:05:50,200", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223130 is handled. Duration 1093 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:52,894", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223131 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:05:55,084", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223132 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:06:01,614", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223133 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:06:43,718", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223134 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:06:45,279", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.start", "message": "User 1758719447 started the bot."}
+{"asctime": "2025-08-13 03:06:45,280", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223135 is handled. Duration 296 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:06:46,938", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223136 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:06:52,331", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.start", "message": "User 1758719447 started the bot."}
+{"asctime": "2025-08-13 03:06:52,332", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223137 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:06:53,516", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223138 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:08:21,990", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.start", "message": "User 1758719447 started the bot."}
+{"asctime": "2025-08-13 03:08:21,992", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223139 is handled. Duration 281 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:08:22,875", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223140 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:09,477", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.start", "message": "User 1758719447 started the bot."}
+{"asctime": "2025-08-13 03:14:09,478", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223141 is handled. Duration 282 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:11,362", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223142 is handled. Duration 281 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:15,087", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "User 1758719447 in CHECK_IN. Msg: '\u043d\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e...'"}
+{"asctime": "2025-08-13 03:14:15,087", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "No risk for user 1758719447. Moving to METHOD_SELECT."}
+{"asctime": "2025-08-13 03:14:15,372", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223143 is handled. Duration 296 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:18,347", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.calming", "message": "User 1758719447 chose 'calm' method."}
+{"asctime": "2025-08-13 03:14:18,987", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223144 is handled. Duration 640 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:23,846", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.calming", "message": "User 1758719447 chose 'another_cycle' in calming flow."}
+{"asctime": "2025-08-13 03:14:24,387", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223145 is handled. Duration 546 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:26,877", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.calming", "message": "User 1758719447 chose 'feel_better' in calming flow."}
+{"asctime": "2025-08-13 03:14:27,726", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223146 is handled. Duration 844 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:30,515", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223147 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:31,416", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223148 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:34,470", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223149 is handled. Duration 344 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:37,315", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "User 1758719447 in CHECK_IN. Msg: '\u043a...'"}
+{"asctime": "2025-08-13 03:14:37,315", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "No risk for user 1758719447. Moving to METHOD_SELECT."}
+{"asctime": "2025-08-13 03:14:37,597", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223150 is handled. Duration 282 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:39,159", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 chose 'vent' method."}
+{"asctime": "2025-08-13 03:14:39,715", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223151 is handled. Duration 562 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:47,249", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u0414\u0430 \u0431\u043b\u044f \u0437\u0430\u0435\u0431\u0430\u043b\u043e \u0432\u0441\u0451...'"}
+{"asctime": "2025-08-13 03:14:47,536", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223152 is handled. Duration 281 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:49,440", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 stopped venting session."}
+{"asctime": "2025-08-13 03:14:50,005", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223153 is handled. Duration 562 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:14:53,478", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223154 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:15:19,017", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223155 is not handled. Duration 0 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:16:42,103", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223156 is handled. Duration 282 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:16:42,677", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "User 1758719447 in CHECK_IN. Msg: '\u0432\u0430\u044b\u0432\u0430...'"}
+{"asctime": "2025-08-13 03:16:42,677", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "No risk for user 1758719447. Moving to METHOD_SELECT."}
+{"asctime": "2025-08-13 03:16:42,961", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223157 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:16:47,497", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.cbt", "message": "User 1758719447 chose 'cbt' method."}
+{"asctime": "2025-08-13 03:16:48,048", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223158 is handled. Duration 547 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:16:52,152", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223159 is handled. Duration 296 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:16:54,962", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223160 is handled. Duration 296 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:16:58,452", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223161 is handled. Duration 296 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:17:03,037", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223162 is handled. Duration 281 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:17:08,666", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223163 is handled. Duration 297 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:17:12,334", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223164 is handled. Duration 280 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:17:14,277", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.cbt", "message": "User 1758719447 finished CBT entry: {'cbt_situation': '\u0444\u043f\u0438\u0437\u0434\u0430', 'cbt_emotions': '1', 'cbt_thought': '\u0445\u0437', 'cbt_distortions': '\u0430', 'cbt_evidence': '\u0445\u0437', 'cbt_alternative': '\u0445\u0437', 'cbt_rerating': '2'}"}
+{"asctime": "2025-08-13 03:17:14,582", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223165 is handled. Duration 312 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:18:17,365", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223166 is handled. Duration 297 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:29:43,480", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223167 is handled. Duration 1031 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 03:29:45,652", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223168 is not handled. Duration 16 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:18:57,127", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223169 is handled. Duration 952 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:18:59,408", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "User 1758719447 in CHECK_IN. Msg: '\u0432\u044b\u0432...'"}
+{"asctime": "2025-08-13 04:18:59,408", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.check_in", "message": "No risk for user 1758719447. Moving to METHOD_SELECT."}
+{"asctime": "2025-08-13 04:18:59,680", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223170 is handled. Duration 266 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:01,291", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.calming", "message": "User 1758719447 chose 'calm' method."}
+{"asctime": "2025-08-13 04:19:01,818", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223171 is handled. Duration 530 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:03,426", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.calming", "message": "User 1758719447 chose 'to_talk' in calming flow."}
+{"asctime": "2025-08-13 04:19:03,951", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223172 is handled. Duration 530 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:05,540", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 chose 'vent' method."}
+{"asctime": "2025-08-13 04:19:06,825", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223173 is handled. Duration 1296 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:07,818", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u044b\u0432\u0430...'"}
+{"asctime": "2025-08-13 04:19:08,088", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223174 is handled. Duration 266 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:08,183", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u044b\u0432...'"}
+{"asctime": "2025-08-13 04:19:08,453", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223175 is handled. Duration 391 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:08,532", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u0430\u044b...'"}
+{"asctime": "2025-08-13 04:19:08,801", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223176 is handled. Duration 485 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:08,832", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u044b\u0432\u0430...'"}
+{"asctime": "2025-08-13 04:19:09,102", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223178 is handled. Duration 266 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:09,135", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u0432\u0430...'"}
+{"asctime": "2025-08-13 04:19:09,405", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223177 is handled. Duration 828 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:09,412", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u0432...'"}
+{"asctime": "2025-08-13 04:19:09,681", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223179 is handled. Duration 594 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:09,684", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u0432...'"}
+{"asctime": "2025-08-13 04:19:09,952", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223183 is handled. Duration 375 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:09,993", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u0430...'"}
+{"asctime": "2025-08-13 04:19:10,265", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223181 is handled. Duration 937 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:10,312", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u0430...'"}
+{"asctime": "2025-08-13 04:19:10,582", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223182 is handled. Duration 1250 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:10,689", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u0430\u0432...'"}
+{"asctime": "2025-08-13 04:19:10,957", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223180 is handled. Duration 1875 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:11,019", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 is venting. Msg: '\u0430...'"}
+{"asctime": "2025-08-13 04:19:11,294", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223184 is handled. Duration 1469 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:12,901", "levelname": "INFO", "name": "source.infrastructure.telegram.handlers.support_methods.venting", "message": "User 1758719447 stopped venting session."}
+{"asctime": "2025-08-13 04:19:13,438", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223185 is handled. Duration 546 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:19:28,963", "levelname": "INFO", "name": "aiogram.event", "message": "Update id=645223186 is not handled. Duration 16 ms by bot id=8376806252"}
+{"asctime": "2025-08-13 04:26:28,753", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Polling stopped"}
+{"asctime": "2025-08-13 04:26:28,755", "levelname": "ERROR", "name": "aiogram.dispatcher", "message": "Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected"}
+{"asctime": "2025-08-13 04:26:28,755", "levelname": "WARNING", "name": "aiogram.dispatcher", "message": "Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8376806252)"}
+{"asctime": "2025-08-13 04:26:28,942", "levelname": "INFO", "name": "aiogram.dispatcher", "message": "Polling stopped for bot @nalimov_skamer_bot id=8376806252 - 'nalimov_skamer'"}
