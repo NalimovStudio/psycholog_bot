@@ -1,6 +1,6 @@
 .idea
 .git
 .gitignore
-.env.example
+source/.env.example
 venv/
 .venv
