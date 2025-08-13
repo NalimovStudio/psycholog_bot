@@ -23,7 +23,6 @@ class UserType(str, Enum):
     Типы пользователя.
     """
     USER = "user"
-    PSYCHOLOGIST = "psychologist"
     ADMIN = "admin"
 
 
