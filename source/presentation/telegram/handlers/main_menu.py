@@ -2,12 +2,12 @@ from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove
 
-from source.infrastructure.telegram.keyboards.keyboards import (
+from source.presentation.telegram.keyboards.keyboards import (
     ButtonText,
     get_support_methods_keyboard,
     get_subscription_offer_keyboard,
 )
-from source.infrastructure.telegram.states.user_states import SupportStates
+from source.presentation.telegram.states.user_states import SupportStates
 
 router = Router(name=__name__)
 

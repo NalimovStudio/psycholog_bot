@@ -5,7 +5,7 @@ from aiogram.types import (
     InlineKeyboardButton,
 )
 
-from source.infrastructure.telegram.callbacks.method_callbacks import (
+from source.presentation.telegram.callbacks.method_callbacks import (
     MethodCallback,
     CalmingCallback,
     VentingCallback,

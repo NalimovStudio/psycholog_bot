@@ -4,9 +4,9 @@ from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
-from source.infrastructure.telegram.callbacks.method_callbacks import MethodCallback, ProblemSolvingCallback
-from source.infrastructure.telegram.keyboards.keyboards import get_main_keyboard, get_problem_solutions_keyboard
-from source.infrastructure.telegram.states.user_states import SupportStates
+from source.presentation.telegram.callbacks.method_callbacks import MethodCallback, ProblemSolvingCallback
+from source.presentation.telegram.keyboards.keyboards import get_main_keyboard, get_problem_solutions_keyboard
+from source.presentation.telegram.states.user_states import SupportStates
 
 logger = logging.getLogger(__name__)
 router = Router(name=__name__)

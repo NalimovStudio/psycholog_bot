@@ -9,8 +9,8 @@ from aiogram.enums import ParseMode
 from typing import AsyncIterable
 
 from source.infrastructure.config import BotConfig
-from source.infrastructure.telegram.middlewares import LoadUserMiddleware
-from source.infrastructure.telegram.handlers import handlers_router
+from source.presentation.telegram.middlewares import LoadUserMiddleware
+from source.presentation.telegram.handlers import handlers_router
 
 
 

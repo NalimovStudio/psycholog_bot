@@ -5,7 +5,7 @@ from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
-from source.infrastructure.telegram.keyboards.keyboards import get_main_keyboard
+from source.presentation.telegram.keyboards.keyboards import get_main_keyboard
 
 logger = logging.getLogger(__name__)
 
