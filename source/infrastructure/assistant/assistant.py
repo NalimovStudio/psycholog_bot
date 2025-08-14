@@ -5,7 +5,9 @@ from os import environ
 from openai import OpenAI
 
 from source.core.exceptions import AssistantResponseException, AssistantException
+from source.core.lexicon import prompts
 from source.core.schemas.assistant_schemas import ContextMessage, AssistantResponse
+from source.infrastructure.assistant.prompts import Prompts
 
 DEEPSEEK_API_KEY = environ.get("DEEPSEEK_API_KEY")
 
@@ -24,7 +26,7 @@ class AssistantInterface(ABC):
     async def get_calm_response(
             self,
             message: str,
-            prompt: ...,
+            prompt: str,
             context_messages: list[ContextMessage]
     ):
         """Режим успокоения. Максимальная эмпатия."""
@@ -34,7 +36,7 @@ class AssistantInterface(ABC):
     async def get_kpt_diary_response(
             self,
             message: str,
-            prompt: ...,
+            prompt: str,
             context_messages: list[ContextMessage]
     ):
         """Дневник эмоций КПТ."""  # TODO обсудить че это такое вообще
@@ -44,7 +46,7 @@ class AssistantInterface(ABC):
     async def get_problems_solver_response(
             self,
             message: str,
-            prompt: ...,
+            prompt: str,
             context_messages: list[ContextMessage],
             temperature: float = 0.4
     ):
@@ -55,7 +57,7 @@ class AssistantInterface(ABC):
     async def get_speak_out_response(
             self,
             message: str,
-            prompt: ...,
+            prompt: str,
             context_messages: list[ContextMessage]
     ):
         """Высказаться. Баланс между эмпатией и решением проблемы."""
@@ -63,14 +65,15 @@ class AssistantInterface(ABC):
 
 
 class Assistant(AssistantInterface):
-    def __init__(self, ):
+    def __init__(self):
         self.client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url="https://api.deepseek.com")
 
     async def get_response(
             self,
             system_prompt: str,
             message: str,
-            context_messages: list[ContextMessage]
+            context_messages: list[ContextMessage],
+            temperature=0.7
     ) -> AssistantResponse:
         messages = [
             {"role": "system", "content": f"{system_prompt}"}
@@ -88,7 +91,7 @@ class Assistant(AssistantInterface):
                 model="deepseek-chat",
                 messages=messages,
                 response_format={"type": "json_object"},
-                temperature=0.3
+                temperature=temperature
             )
         except:
             logging.ERROR("Ошибка при обращении к DeepseekAPI")
@@ -100,3 +103,36 @@ class Assistant(AssistantInterface):
         except:
             logging.ERROR("Ошибка валидации ответа от Deepseek")
             raise AssistantResponseException
+
+    async def get_problems_solver_response(
+            self,
+            message: str,
+            context_messages: list[ContextMessage],
+            temperature: float = 0.4,
+            prompt: str = prompts.PROBLEMS_SOLVER_PROMPT
+    ) -> str:
+        pass
+
+    async def get_speak_out_response(
+            self,
+            message: str,
+            context_messages: list[ContextMessage],
+            prompt: str = prompts.SPEAK_OUT_PROMPT
+    ) -> str:
+        pass
+
+    async def get_kpt_diary_response(
+            self,
+            message: str,
+            context_messages: list[ContextMessage],
+            prompt: str = prompts.KPT_DIARY_PROMPT
+    ) -> str:
+        pass
+
+    async def get_calm_response(
+            self,
+            message: str,
+            context_messages: list[ContextMessage],
+            prompt: str = prompts.GET_CALM_PROMPT
+    ) -> str:
+        pass
