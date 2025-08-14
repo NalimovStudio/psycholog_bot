@@ -13,9 +13,12 @@ class UserDialogsLoggingSchema(BaseModel):
     messages: list[str] = Field(..., description="Массив сообщений в диалоге")
     created_at: datetime = Field(..., description="когда сообщение отправлено")
 
+    class Config:
+        from_attributes = True
+
 
 class UserSchema(BaseModel):
-    id: UUID = Field(..., description="ID пользователя в формате UUID")
+    id: Optional[UUID] = Field(None, description="ID пользователя в формате UUID")
 
     telegram_id: str = Field(..., description="Телеграм айди в формате строки")
     username: str = Field(..., description="Телеграм юзернейм")

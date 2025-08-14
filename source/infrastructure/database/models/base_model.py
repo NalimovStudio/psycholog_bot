@@ -16,15 +16,18 @@ class BaseModel(DeclarativeBase):
     """Базовая модель"""
     __abstract__ = True
 
-    schema_class: ClassVar[Type[S]]
-
     id: Mapped[PG_UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=func.gen_random_uuid())
+
+    @property
+    @abstractmethod
+    def schema_class(cls) -> Type[S]:
+        raise NotImplementedError
 
     def get_schema(self) -> S:
         return self.schema_class.model_validate(self)
 
     @classmethod
-    def from_pydantic(cls: Type[M], schema: PydanticBaseModel, **kwargs: Any) -> M:
+    def from_pydantic(cls: Type[M], schema: S, **kwargs: Any) -> M:
         """Создает SQLAlchemy модель из схемы Pydantic"""
         model_data: dict = schema.model_dump(exclude_unset=True)
         return cls(**model_data, **kwargs)

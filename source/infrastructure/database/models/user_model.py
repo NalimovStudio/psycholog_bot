@@ -14,9 +14,7 @@ from source.infrastructure.database.models.base_model import BaseModel, Timestam
 class User(BaseModel):
     __tablename__ = "users"
 
-    schema_class = UserSchema
-
-    telegram_id: Mapped[str] = mapped_column(String, comment="telegram id")
+    telegram_id: Mapped[str] = mapped_column(String, comment="telegram id", unique=True)
     username: Mapped[str] = mapped_column(String, comment="telegram username")
     first_name: Mapped[Optional[str]] = mapped_column(String, comment="telegram first name")
     last_name: Mapped[Optional[str]] = mapped_column(String, comment="telegram last name")
@@ -46,12 +44,14 @@ class User(BaseModel):
         lazy="selectin"
     )
 
+    @property
+    def schema_class(cls) -> Type[S]:
+        return UserSchema
+
 
 class UserDialogsLogging(BaseModel, TimestampCreatedAtMixin):
     """Таблица с прошлыми диалогами"""
     __tablename__ = "users_dialogs_logging"
-
-    schema_class = UserDialogsLoggingSchema
 
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"),
@@ -70,6 +70,6 @@ class UserDialogsLogging(BaseModel, TimestampCreatedAtMixin):
         comment="Массив сообщений пользователя"
     )
 
-    @classmethod
-    def from_pydantic_to_model(cls: Type["UserDialogsLogging"], schema: UserDialogsLoggingSchema) -> "UserDialogsLogging":
-        return cls(**schema.model_dump())
+    @property
+    def schema_class(cls) -> Type[S]:
+        return UserDialogsLoggingSchema
