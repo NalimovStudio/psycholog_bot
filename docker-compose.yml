@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     ports:
-      - "1488:5432"
+      - "1488:5431"
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
