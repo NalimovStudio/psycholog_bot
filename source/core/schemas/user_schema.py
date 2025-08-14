@@ -1,21 +1,26 @@
 from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
 from source.core.enum import UserType, SubscriptionType
 
 
-class LoggingRequest(BaseModel):
-    message: str = Field(..., description="отправленное сообщение")
-    request_created_at: datetime = Field(..., description="когда сообщение отправлено")
+class UserDialogsLoggingSchema(BaseModel):
+    id: UUID = Field(..., description="ID диалога в формате UUID")
+    user_id: UUID = Field(..., description="ID юзера в формате UUID")
+    messages: list[str] = Field(..., description="Массив сообщений в диалоге")
+    created_at: datetime = Field(..., description="когда сообщение отправлено")
 
 
 class UserSchema(BaseModel):
-    telegram_id: str = Field(..., description="тг айди")
-    username: str = Field(..., description="тг юзернейм")
-    first_name: Optional[str] = Field(None, description="тг имя")
-    last_name: Optional[str] = Field(None, description="тг фамилия")
+    id: UUID = Field(..., description="ID пользователя в формате UUID")
+
+    telegram_id: str = Field(..., description="Телеграм айди в формате строки")
+    username: str = Field(..., description="Телеграм юзернейм")
+    first_name: Optional[str] = Field(None, description="Телеграм имя")
+    last_name: Optional[str] = Field(None, description="Телеграм фамилия")
 
     dialogs_completed_today: Optional[int] = Field(0, description="сколько было диалогов сегодня")
     dialogs_completed: int = Field(..., description="сколько было диалогов в общем")
@@ -25,7 +30,7 @@ class UserSchema(BaseModel):
     subscription: SubscriptionType = Field(..., description="тип подписки")
     subscription_date_end: Optional[datetime] = Field(None, description="когда кончится подписка")
 
-    logging_requests: Optional[list[LoggingRequest]] = Field(None, description="массив со всеми запросами")
+    logging_requests: Optional[list[UserDialogsLoggingSchema]] = Field(None, description="массив со всеми запросами")
 
     class Config:
         from_attributes = True
