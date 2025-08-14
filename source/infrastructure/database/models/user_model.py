@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Type
 
 from sqlalchemy import String, DateTime, ForeignKey, Integer
 from sqlalchemy.dialects import postgresql
@@ -7,12 +7,14 @@ from sqlalchemy.dialects.postgresql import ARRAY, VARCHAR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from source.core.enum import SubscriptionType, UserType
-from source.core.schemas.user_schema import UserSchema
-from source.infrastructure.database.models.base_model import BaseModel, TimestampCreatedAtMixin
+from source.core.schemas.user_schema import UserSchema, UserDialogsLoggingSchema
+from source.infrastructure.database.models.base_model import BaseModel, TimestampCreatedAtMixin, S
 
 
 class User(BaseModel):
     __tablename__ = "users"
+
+    schema_class = UserSchema
 
     telegram_id: Mapped[str] = mapped_column(String, comment="telegram id")
     username: Mapped[str] = mapped_column(String, comment="telegram username")
@@ -38,16 +40,18 @@ class User(BaseModel):
     subscription_date_end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
     logging_requests: Mapped[list["UserDialogsLogging"]] = relationship(
-        "UserDialogsLogging", back_populates="user", cascade="all, delete-orphan"
+        "UserDialogsLogging",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        lazy="selectin"
     )
-
-    def get_schema(self) -> UserSchema:
-        return UserSchema.model_validate(self)
 
 
 class UserDialogsLogging(BaseModel, TimestampCreatedAtMixin):
     """Таблица с прошлыми диалогами"""
     __tablename__ = "users_dialogs_logging"
+
+    schema_class = UserDialogsLoggingSchema
 
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"),
@@ -56,10 +60,16 @@ class UserDialogsLogging(BaseModel, TimestampCreatedAtMixin):
     )
 
     user: Mapped["User"] = relationship(
-        "User", back_populates="logging_requests"
+        "User",
+        back_populates="logging_requests",
+        lazy="selectin"
     )
 
     messages: Mapped[list[str]] = mapped_column(
         ARRAY(VARCHAR),  # Указываем, что массив состоит из строк VARCHAR
         comment="Массив сообщений пользователя"
     )
+
+    @classmethod
+    def from_pydantic_to_model(cls: Type["UserDialogsLogging"], schema: UserDialogsLoggingSchema) -> "UserDialogsLogging":
+        return cls(**schema.model_dump())
