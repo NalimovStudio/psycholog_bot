@@ -7,6 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess
 from sqlalchemy.pool import NullPool
 
 from source.config import app_config
+from source.core.enum import SubscriptionType, UserType
+from source.core.schemas.user_schema import UserSchema
 from source.infrastructure.database.repository.user_repo import UserRepository
 
 
@@ -55,3 +57,14 @@ async def session(test_engine) -> AsyncGenerator[AsyncSession, None]:
 @pytest.fixture(scope="function")
 async def user_repo(session: AsyncSession) -> UserRepository:
     return UserRepository(session=session)
+
+
+@pytest.fixture
+async def user_schema() -> UserSchema:
+    return UserSchema(
+        telegram_id="1488",
+        username="sperma",
+        dialogs_completed=0,
+        user_type=UserType.USER,
+        subscription=SubscriptionType.FREE
+    )
