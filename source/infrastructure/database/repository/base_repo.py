@@ -67,7 +67,6 @@ class BaseRepository(Generic[M]):
                 .returning(self.model)
                 )
         result = await self.session.execute(stmt)
-        await self.session.commit()
 
         model: M = result.scalar_one_or_none()
         return model.get_schema()
@@ -75,20 +74,11 @@ class BaseRepository(Generic[M]):
     async def delete(self, model_id: UUID) -> None:
         stmt: Delete = delete(self.model).where(self.model.id == model_id)
         await self.session.execute(stmt)
-        try:
-            await self.session.commit()
-        except SQLAlchemyError:
-            await self.session.rollback()
-            raise
 
     async def create(self, model_schema: S) -> S:
         """Создание модели model: M"""
-        try:
-            model: M = self.model.from_pydantic(schema=model_schema)
-            self.session.add(model)
-            await self.session.commit()
-            await self.session.refresh(model)
-            return model.get_schema()
-        except SQLAlchemyError:
-            await self.session.rollback()
-            raise
+        model: M = self.model.from_pydantic(schema=model_schema)
+        self.session.add(model)
+        await self.session.commit()
+        await self.session.refresh(model)
+        return model.get_schema()

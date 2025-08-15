@@ -7,7 +7,8 @@ from dishka.integrations.aiogram import CONTAINER_NAME
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, User
 
-from source.application.user import CreateUser, CreateUserDTO
+from source.application.user import CreateUser
+from source.core.schemas.user_schema import UserSchemaRequest
 #from source.application.user.get_by_id import GetUserById
 
 
@@ -24,8 +25,8 @@ class LoadUserMiddleware(BaseMiddleware):
                 create_user: CreateUser = await dishka.get(CreateUser)
                 aiogram_user: User = data["event_from_user"]
                 user = await create_user(
-                    CreateUserDTO(
-                        id=aiogram_user.id,
+                    UserSchemaRequest(
+                        telegram_id=aiogram_user.id,
                         username=aiogram_user.username
                     )
                 )
