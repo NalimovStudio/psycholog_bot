@@ -37,3 +37,13 @@ class UserSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserSchemaRequest(BaseModel):
+    telegram_id: str = Field(..., description="Телеграм айди в формате строки")
+    username: str = Field(..., description="Телеграм юзернейм")
+    first_name: Optional[str] = Field(None, description="Телеграм имя")
+    last_name: Optional[str] = Field(None, description="Телеграм фамилия")
+
+    class Config:
+        from_attributes = True
