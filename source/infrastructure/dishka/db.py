@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncEngine, AsyncSession, create_async_engine
 
 from source.infrastructure.config import DatabaseConfig
+from source.infrastructure.database.uow import UnitOfWork
 
 
 class DatabaseProvider(Provider):
@@ -30,4 +31,4 @@ class DatabaseProvider(Provider):
             finally:
                 pass
 
-    #TODO PROVIDE UOW
+    uow=provide(UnitOfWork, scope=Scope.REQUEST)
