@@ -73,6 +73,7 @@ async def test_create_user(user_repo: UserRepository, user_schema):
     except Exception:
         assert True
 
+
 @pytest.mark.asyncio
 async def test_delete(user_repo, user_schema):
     user_schema_from_create: UserSchema = await user_repo.create(user_schema)

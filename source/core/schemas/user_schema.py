@@ -40,6 +40,7 @@ class UserSchema(BaseModel):
 
 
 class UserSchemaRequest(BaseModel):
+    """Схема для создания юзера или обновления данных о юзере"""
     telegram_id: str = Field(..., description="Телеграм айди в формате строки")
     username: str = Field(..., description="Телеграм юзернейм")
     first_name: Optional[str] = Field(None, description="Телеграм имя")
