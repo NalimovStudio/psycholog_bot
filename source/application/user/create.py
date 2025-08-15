@@ -1,46 +1,34 @@
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import TypeVar, Generic, Type, Optional, Sequence
 from datetime import datetime
 
+
 from sqlalchemy.exc import IntegrityError
+from pydantic import BaseModel as BaseModelSchema
+
 
 from source.application.base import Interactor
-#from source.infrastructure.database.repositories import UsersRepository #TODO РЕАЛИЗОВАТЬ репозиторий для пользователей
-#from source.infrastructure.database.uow import UnitOfWork #TODO РЕАЛИЗОВАТЬ UoW
-from source.core.schemas.user import UserDTO
+from source.infrastructure.database.repository import UserRepository #TODO РЕАЛИЗОВАТЬ репозиторий для пользователей
+from source.infrastructure.database.uow import UnitOfWork #TODO РЕАЛИЗОВАТЬ UoW
+from source.core.schemas.user_schema import UserSchemaRequest
+
+S = TypeVar("S", bound=BaseModelSchema)
 
 
+class CreateUser(Interactor[UserSchemaRequest, S]):
+    def __init__(self, repository: UserRepository, uow: UnitOfWork): 
+        self.repository = repository
+        self.uow = uow
 
-@dataclass(frozen=True, slots=True)
-class CreateUserDTO:
-    id: int
-    username: Optional[str] = None
-    created_at: datetime = datetime.now()
-
-class UsersRepository:
-    ...
-
-class UnitOfWork:
-    ...
-
-class CreateUser(Interactor[CreateUserDTO, UserDTO]):
-    #def __init__(self, repository: UsersRepository, uow: UnitOfWork): 
-        #self.repository = repository
-        #self.uow = uow
-
-    async def __call__(self, data: CreateUserDTO) -> UserDTO:
+    async def __call__(self, data: UserSchemaRequest) -> S:
         try:
-            #async with self.uow:
-                #user = await self.repository.create_user(
-                    #UserDTO(
-                        #id=data.id,
-                        #username=data.username,
-                        #created_at=data.created_at,
-                    #)
-                #)
-                #await self.uow.commit() 
-                #return user
+            async with self.uow:
+                user = await self.repository.create_user(
+                    data
+                )
+                await self.uow.commit() 
+                return user
             return data
         except IntegrityError:
             print('Error')
