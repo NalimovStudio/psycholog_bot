@@ -7,7 +7,6 @@ from openai import OpenAI
 from source.core.exceptions import AssistantResponseException, AssistantException
 from source.core.lexicon import prompts
 from source.core.schemas.assistant_schemas import ContextMessage, AssistantResponse
-from source.infrastructure.assistant.prompts import Prompts
 
 DEEPSEEK_API_KEY = environ.get("DEEPSEEK_API_KEY")
 
