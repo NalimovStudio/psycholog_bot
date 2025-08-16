@@ -3,22 +3,19 @@ from os import environ
 
 from openai import OpenAI
 
-from source.application.ai_assistant.AssistantServiceInterface import AssistantServiceInterface
 from source.core.exceptions import AssistantResponseException, AssistantException
 from source.core.schemas.assistant_schemas import ContextMessage, AssistantResponse
 
-DEEPSEEK_API_KEY = environ.get("DEEPSEEK_API_KEY")
 
-
-class AssistantClient(AssistantServiceInterface):
-    def __init__(self):
-        self.client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url="https://api.deepseek.com")
+class AssistantClient:
+    def __init__(self, client: OpenAI):
+        self.client = client
 
     async def get_response(
             self,
             system_prompt: str,
             message: str,
-            context_messages: list[ContextMessage],
+            context_messages: list[ContextMessage] = [],
             temperature=0.7
     ) -> AssistantResponse:
         messages = [
@@ -36,7 +33,6 @@ class AssistantClient(AssistantServiceInterface):
             response = self.client.chat.completions.create(
                 model="deepseek-chat",
                 messages=messages,
-                response_format={"type": "json_object"},
                 temperature=temperature
             )
         except:
@@ -44,7 +40,7 @@ class AssistantClient(AssistantServiceInterface):
             raise AssistantException
 
         try:
-            return AssistantResponse.model_validate(response.choices[0].message.content)
+            return AssistantResponse.model_validate({"message": response.choices[0].message.content})
 
         except:
             logging.ERROR("Ошибка валидации ответа от Deepseek")

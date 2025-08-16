@@ -11,19 +11,11 @@ from source.presentation.telegram.keyboards.keyboards import (
     get_support_methods_keyboard,
 )
 from source.presentation.telegram.states.user_states import SupportStates
+from source.core.lexicon.bot import CALMING_EXERCISE_TEXT
 
 logger = logging.getLogger(__name__)
 router = Router(name=__name__)
 
-CALMING_EXERCISE_TEXT = (
-    "Давай попробуем технику <b>5-4-3-2-1</b>, чтобы вернуться в настоящий момент.\n\n"
-    "• Назови <b>5 вещей</b>, которые ты видишь вокруг себя.\n"
-    "• Назови <b>4 звука</b>, которые ты слышишь.\n"
-    "• Назови <b>3 ощущения</b> в теле (например, касание одежды, поверхность под ногами).\n"
-    "• Назови <b>2 запаха</b>, которые ты чувствуешь.\n"
-    "• Назови <b>1 вещь</b>, которую ты можешь попробовать на вкус (или просто сделай глоток воды).\n\n"
-    "Сделай это медленно, в своем темпе. Когда закончишь, нажми на кнопку ниже."
-)
 
 
 @router.callback_query(MethodCallback.filter(F.name == "calm"), SupportStates.METHOD_SELECT)

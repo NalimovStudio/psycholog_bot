@@ -3,10 +3,12 @@ import logging
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
+from dishka.integrations.aiogram import FromDishka
 
 from source.presentation.telegram.callbacks.method_callbacks import MethodCallback, ProblemSolvingCallback
 from source.presentation.telegram.keyboards.keyboards import get_main_keyboard, get_problem_solutions_keyboard
 from source.presentation.telegram.states.user_states import SupportStates
+from source.application.ai_assistant.ai_assistant_service import AssistantService
 
 logger = logging.getLogger(__name__)
 router = Router(name=__name__)
@@ -30,36 +32,27 @@ async def handle_ps_s1_define(message: Message, state: FSMContext):
 
 
 @router.message(SupportStates.PROBLEM_S2_GOAL)
-async def handle_ps_s2_goal(message: Message, state: FSMContext):
+async def handle_ps_s2_goal(message: Message, state: FSMContext, assistant: FromDishka[AssistantService]):
     data = await state.update_data(problem_goal=message.text)
     await state.set_state(SupportStates.PROBLEM_S3_OPTIONS)
 
-    await message.answer("Спасибо. Я подумаю и предложу 3 варианта действий. Минутку...")
+    solve_problems = (await assistant.get_problems_solver_response(message=message.text)).message
+
+    await message.answer("Спасибо. Я подумаю и предложу варианты действий. Минутку...")
     #TODO Тут нужно решить заглушку и поставить нейронку на создании 3 вариантой решении проблемы
-    solutions = [
-        {
-            "option": "Поговорить с другом о том, что беспокоит.",
-            "pros": "Поддержка, другой взгляд.", "cons": "Может не быть времени/ресурсов у друга."
-        },
-        {
-            "option": "Выделить 30 минут на прогулку на свежем воздухе.",
-            "pros": "Смена обстановки, физическая активность.", "cons": "Может быть плохая погода."
-        },
-        {
-            "option": "Записать все мысли о проблеме на бумаге.",
-            "pros": "Помогает структурировать мысли.", "cons": "Может усилить зацикливание на проблеме."
-        },
-    ]
-    await state.update_data(solutions=solutions)
+    logger.info(f"Сообщение по решению нейронки {solve_problems}")
+    solutions = solve_problems
+    await state.update_data(solutions=solve_problems)
 
     response_text = "Вот несколько вариантов:\n\n"
-    for i, sol in enumerate(solutions):
-        response_text += f"<b>Вариант {i+1}:</b> {sol['option']}\n"
-        response_text += f"<i>Плюсы:</i> {sol['pros']}\n"
-        response_text += f"<i>Риски:</i> {sol['cons']}\n\n"
+    #for i, sol in enumerate(solutions):
+        #response_text += f"<b>Вариант {i+1}:</b> {sol['option']}\n"
+        #response_text += f"<i>Плюсы:</i> {sol['pros']}\n"
+        #response_text += f"<i>Риски:</i> {sol['cons']}\n\n"
 
-    response_text += "Какой из вариантов тебе кажется наиболее подходящим сейчас?"
-    await message.answer(response_text, reply_markup=get_problem_solutions_keyboard(solutions))
+    #response_text += "Какой из вариантов тебе кажется наиболее подходящим сейчас?"
+    response_text += solve_problems
+    await message.answer(response_text, reply_markup=get_problem_solutions_keyboard("Ебать ты даун"))
 
 
 @router.callback_query(ProblemSolvingCallback.filter(F.action == "choose_option"), SupportStates.PROBLEM_S3_OPTIONS)

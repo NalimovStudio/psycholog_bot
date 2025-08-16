@@ -6,8 +6,8 @@ from .config import ConfigProvider
 from .db import DatabaseProvider
 from .interactors import InteractorsProvider
 from .storage_redis import RedisProvider
-#from .interactors import
-#from .repositories import RepositoryProvider
+from .repositories import RepositoryProvider
+from .neuron import AssistantProvider
 
 
 def make_bot_container() -> AsyncContainer:
@@ -19,6 +19,8 @@ def make_bot_container() -> AsyncContainer:
             BotProvider(),
             DispatcherProvider(),
             InteractorsProvider(),
+            RepositoryProvider(),
+            AssistantProvider(),
             AiogramProvider(),
         ]
     )

@@ -4,10 +4,12 @@ from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
+from dishka.integrations.aiogram import FromDishka
 
 from source.presentation.telegram.callbacks.method_callbacks import MethodCallback
 from source.presentation.telegram.keyboards.keyboards import get_venting_summary_keyboard, get_main_keyboard
 from source.presentation.telegram.states.user_states import SupportStates
+from source.application.ai_assistant.ai_assistant_service import AssistantService
 
 logger = logging.getLogger(__name__)
 router = Router(name=__name__)
@@ -37,8 +39,9 @@ async def handle_stop_venting(message: Message, state: FSMContext):
 
 
 @router.message(SupportStates.VENTING)
-async def handle_venting_message(message: Message, state: FSMContext):
+async def handle_venting_message(message: Message, state: FSMContext, assistant: FromDishka[AssistantService]):
     logger.info(f"User {message.from_user.id} is venting. Msg: '{message.text[:30]}...'")
 
-    response_text = "Спасибо, что делишься. Я рядом и слышу тебя." #TODO, Пока стоит заглушка, нужно сделать бота, что бы принимал сообщения
+    response_text = (await assistant.get_speak_out_response(message=message.text)).message
+    logger.info(f"Correctly venting")
     await message.answer(response_text)

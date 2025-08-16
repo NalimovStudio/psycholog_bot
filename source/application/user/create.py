@@ -24,7 +24,7 @@ class CreateUser(Interactor[UserSchemaRequest, S]):
     async def __call__(self, data: UserSchemaRequest) -> S:
         try:
             async with self.uow:
-                user = await self.repository.create_user(
+                user = await self.repository.create(
                     data
                 )
                 await self.uow.commit() 

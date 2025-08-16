@@ -26,13 +26,15 @@ class LoadUserMiddleware(BaseMiddleware):
                 aiogram_user: User = data["event_from_user"]
                 user = await create_user(
                     UserSchemaRequest(
-                        telegram_id=aiogram_user.id,
+                        telegram_id=str(aiogram_user.id),
                         username=aiogram_user.username
                     )
                 )
                 data["user"] = user
                 return await handler(event, data)
         except Exception as exc:
-            print(exc)
             pass # TODO Реализовать логику получения юзера, если он уже есть в бд ЛИБО сделать это в интерфейсе CreateUser
+            return await handler(event, data)
+
+        
             
