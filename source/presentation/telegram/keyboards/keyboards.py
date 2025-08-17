@@ -123,13 +123,31 @@ def get_subscription_offer_keyboard() -> InlineKeyboardMarkup:
     )
 
 
-def get_problem_solutions_keyboard(solutions: list[dict]) -> InlineKeyboardMarkup:
-    buttons = []
-    for i, solution in enumerate(solutions):
-        buttons.append([
-            InlineKeyboardButton(
-                text=f"Выбрать вариант {i + 1}",
-                callback_data=ProblemSolvingCallback(action="choose_option", option_id=i).pack()
-            )
-        ])
-    return InlineKeyboardMarkup(inline_keyboard=buttons)
+def get_problem_solutions_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="Вариант 1",
+                    callback_data=ProblemSolvingCallback(action="choose_option", option_id=0).pack()
+                ),
+                InlineKeyboardButton(
+                    text="Вариант 2",
+                    callback_data=ProblemSolvingCallback(action="choose_option", option_id=1).pack()
+                ),
+                InlineKeyboardButton(
+                    text="Вариант 3",
+                    callback_data=ProblemSolvingCallback(action="choose_option", option_id=2).pack()
+                ),
+            ]
+        ]
+    )
+
+
+def get_back_to_menu_keyboard() -> ReplyKeyboardMarkup:
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="Вернуться в меню")]
+        ],
+        resize_keyboard=True,
+    )

@@ -16,3 +16,4 @@ class UserType(str, Enum):
     """
     USER = "user"
     ADMIN = "admin"
+    ASSISTANT = "assistant"

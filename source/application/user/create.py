@@ -9,8 +9,8 @@ from pydantic import BaseModel as BaseModelSchema
 
 
 from source.application.base import Interactor
-from source.infrastructure.database.repository import UserRepository #TODO РЕАЛИЗОВАТЬ репозиторий для пользователей
-from source.infrastructure.database.uow import UnitOfWork #TODO РЕАЛИЗОВАТЬ UoW
+from source.infrastructure.database.repository import UserRepository
+from source.infrastructure.database.uow import UnitOfWork
 from source.core.schemas.user_schema import UserSchemaRequest
 
 S = TypeVar("S", bound=BaseModelSchema)
@@ -24,14 +24,13 @@ class CreateUser(Interactor[UserSchemaRequest, S]):
     async def __call__(self, data: UserSchemaRequest) -> S:
         try:
             async with self.uow:
-                user = await self.repository.create_user(
+                user = await self.repository.create(
                     data
                 )
                 await self.uow.commit() 
                 return user
             return data
         except IntegrityError:
-            print('Error')
             pass #TODO Тут нужно свою ошибку написать и вызывать ее для дальнейшей обработки либо же самому ошибку в этом блоке решать и возвращать данные
             #Ошибка связана с тем что пользователь уже есть в бд
     

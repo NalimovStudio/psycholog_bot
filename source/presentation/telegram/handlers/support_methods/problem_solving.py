@@ -1,12 +1,20 @@
 import logging
+import json
 
-from aiogram import F, Router
+from aiogram import F, Router, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
+from dishka.integrations.aiogram import FromDishka
 
 from source.presentation.telegram.callbacks.method_callbacks import MethodCallback, ProblemSolvingCallback
 from source.presentation.telegram.keyboards.keyboards import get_main_keyboard, get_problem_solutions_keyboard
 from source.presentation.telegram.states.user_states import SupportStates
+from source.application.ai_assistant.ai_assistant_service import AssistantService
+from source.application.message_history.message_history_service import MessageHistoryService
+from source.core.schemas.assistant_schemas import ContextMessage
+from source.presentation.telegram.utils import send_long_message, extract_json_from_markdown
+from source.application.message_history.message_history_service import MessageHistoryService
+from source.core.schemas.assistant_schemas import ContextMessage
 
 logger = logging.getLogger(__name__)
 router = Router(name=__name__)
@@ -21,8 +29,12 @@ async def handle_problem_solving_method(query: CallbackQuery, state: FSMContext)
     await query.answer()
 
 
+
 @router.message(SupportStates.PROBLEM_S1_DEFINE)
-async def handle_ps_s1_define(message: Message, state: FSMContext):
+async def handle_ps_s1_define(message: Message, state: FSMContext, history: FromDishka[MessageHistoryService]):
+    await history.add_message_to_history(
+        message.from_user.id, "problem_solving", ContextMessage(role="user", message=message.text)
+    )
     await state.update_data(problem_definition=message.text)
     await state.set_state(SupportStates.PROBLEM_S2_GOAL)
     text = "Хорошо. А как ты поймешь, что проблема решена? Что будет твоим критерием успеха?"
@@ -30,36 +42,65 @@ async def handle_ps_s1_define(message: Message, state: FSMContext):
 
 
 @router.message(SupportStates.PROBLEM_S2_GOAL)
-async def handle_ps_s2_goal(message: Message, state: FSMContext):
-    data = await state.update_data(problem_goal=message.text)
+async def handle_ps_s2_goal(
+        message: Message,
+        state: FSMContext,
+        assistant: FromDishka[AssistantService],
+        history: FromDishka[MessageHistoryService],
+        bot: Bot
+):
+    user_id = message.from_user.id
+    context_scope = "problem_solving"
+
+    user_message = ContextMessage(role="user", message=message.text)
+    await history.add_message_to_history(user_id, context_scope, user_message)
+    message_history = await history.get_history(user_id, context_scope)
+
+    await state.update_data(problem_goal=message.text)
     await state.set_state(SupportStates.PROBLEM_S3_OPTIONS)
+    await message.answer("Спасибо. Я подумаю и предложу варианты действий. Минутку...")
 
-    await message.answer("Спасибо. Я подумаю и предложу 3 варианта действий. Минутку...")
-    #TODO Тут нужно решить заглушку и поставить нейронку на создании 3 вариантой решении проблемы
-    solutions = [
-        {
-            "option": "Поговорить с другом о том, что беспокоит.",
-            "pros": "Поддержка, другой взгляд.", "cons": "Может не быть времени/ресурсов у друга."
-        },
-        {
-            "option": "Выделить 30 минут на прогулку на свежем воздухе.",
-            "pros": "Смена обстановки, физическая активность.", "cons": "Может быть плохая погода."
-        },
-        {
-            "option": "Записать все мысли о проблеме на бумаге.",
-            "pros": "Помогает структурировать мысли.", "cons": "Может усилить зацикливание на проблеме."
-        },
-    ]
-    await state.update_data(solutions=solutions)
+    try:
+        raw_response = await assistant.get_problems_solver_response(
+            message=message.text,
+            context_messages=message_history
+        )
+        
+        logger.info(f"Raw AI response for user {user_id} in scope {context_scope}: {raw_response.message}")
+        
+        json_string = extract_json_from_markdown(raw_response.message)
+        solutions = json.loads(json_string)
 
-    response_text = "Вот несколько вариантов:\n\n"
-    for i, sol in enumerate(solutions):
-        response_text += f"<b>Вариант {i+1}:</b> {sol['option']}\n"
-        response_text += f"<i>Плюсы:</i> {sol['pros']}\n"
-        response_text += f"<i>Риски:</i> {sol['cons']}\n\n"
+        ai_message = ContextMessage(role="assistant", message=raw_response.message)
+        await history.add_message_to_history(user_id, context_scope, ai_message)
 
-    response_text += "Какой из вариантов тебе кажется наиболее подходящим сейчас?"
-    await message.answer(response_text, reply_markup=get_problem_solutions_keyboard(solutions))
+        await state.update_data(solutions=solutions)
+
+        response_text = "Вот несколько вариантов:\n\n"
+        for i, sol in enumerate(solutions):
+            response_text += f"<b>Вариант {i + 1}:</b> {sol.get('option', 'N/A')}\n"
+            response_text += f"<i>Плюсы:</i> {sol.get('pros', 'N/A')}\n"
+            response_text += f"<i>Риски:</i> {sol.get('cons', 'N/A')}\n\n"
+
+        response_text += "Какой из вариантов тебе кажется наиболее подходящим сейчас?"
+        await send_long_message(
+            message=message,
+            text=response_text,
+            bot=bot,
+            keyboard=get_problem_solutions_keyboard()
+        )
+
+    except (json.JSONDecodeError, TypeError, KeyError) as e:
+        logger.error(f"Failed to parse/process AI response for user {user_id} in scope {context_scope}: {e}")
+        await message.answer(
+            "Произошла ошибка при обработке ответа. Попробуйте сформулировать проблему немного иначе."
+        )
+        await state.set_state(SupportStates.METHOD_SELECT)
+    except Exception as e:
+        logger.error(f"An unexpected error occurred for user {user_id} in scope {context_scope}: {e}")
+        await message.answer("Что-то пошло не так. Пожалуйста, попробуйте позже.")
+        await state.clear()
+        await history.clear_history(user_id, context_scope)
 
 
 @router.callback_query(ProblemSolvingCallback.filter(F.action == "choose_option"), SupportStates.PROBLEM_S3_OPTIONS)
@@ -75,7 +116,10 @@ async def handle_ps_s3_choice(query: CallbackQuery, callback_data: ProblemSolvin
 
 
 @router.message(SupportStates.PROBLEM_S4_CHOICE)
-async def handle_ps_s4_step(message: Message, state: FSMContext):
+async def handle_ps_s4_step(message: Message, state: FSMContext, history: FromDishka[MessageHistoryService]):
+    await history.add_message_to_history(
+        message.from_user.id, "problem_solving", ContextMessage(role="user", message=message.text)
+    )
     await state.update_data(problem_step=message.text)
     await state.set_state(SupportStates.PROBLEM_S5_PACT)
     text = "Супер. Это звучит как отличный, выполнимый шаг. Давай заключим 'пакт'. Когда ты планируешь это сделать? (Например, 'сегодня вечером' или 'завтра в 12:00')."
@@ -83,10 +127,17 @@ async def handle_ps_s4_step(message: Message, state: FSMContext):
 
 
 @router.message(SupportStates.PROBLEM_S5_PACT)
-async def handle_ps_s5_pact(message: Message, state: FSMContext):
+async def handle_ps_s5_pact(message: Message, state: FSMContext, history: FromDishka[MessageHistoryService]):
+    user_id = message.from_user.id
+    context_scope = "problem_solving"
+    await history.add_message_to_history(
+        user_id, context_scope, ContextMessage(role="user", message=message.text)
+    )
     await state.update_data(problem_pact=message.text)
-    # TODO: Добавить логику для создания напоминания через APScheduler/Celery
-    logger.info(f"User {message.from_user.id} finished Problem-Solving entry: {await state.get_data()}")
+    logger.info(f"User {user_id} finished Problem-Solving entry: {await state.get_data()}")
+    
     await state.clear()
+    await history.clear_history(user_id, context_scope)
+    
     text = "Договорились! Я верю, у тебя получится. Если хочешь, я могу напомнить тебе об этом. (Функция напоминаний в разработке).\n\nВозвращаю в главное меню."
     await message.answer(text, reply_markup=get_main_keyboard())

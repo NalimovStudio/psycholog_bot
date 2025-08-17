@@ -27,7 +27,7 @@ class RedisConfig(BaseModel):
 
 class DatabaseConfig(BaseModel):
     user: str
-    password: str
+    password: SecretStr
     path: str
     host: str = "db"
     port: int = 5432
@@ -41,10 +41,13 @@ class DatabaseConfig(BaseModel):
             host=self.host,
             port=self.port,
             username=self.user,
-            password=self.password,
+            password=self.password.get_secret_value(),
             path=self.path
         )
         return dsn.unicode_string()
     
 class BotConfig(BaseModel):
     token: SecretStr
+
+class AssistantConfig(BaseModel):
+    api_key: SecretStr

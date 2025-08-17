@@ -1,4 +1,4 @@
-from .models import DatabaseConfig, BotConfig, RedisConfig
+from .models import DatabaseConfig, BotConfig, RedisConfig, AssistantConfig
 
 from environs import Env
 
@@ -25,4 +25,9 @@ def get_redis_config(env: Env) -> RedisConfig:
         password=env.str("REDIS_PASSWORD", None),
         username=env.str("REDIS_USERNAME", None),
         database=env.str("REDIS_DATABASE", "0")
+    )
+
+def get_assistant_config(env: Env) -> AssistantConfig:
+    return AssistantConfig(
+        api_key=env.str("ASSISTANT_API_KEY", "")
     )

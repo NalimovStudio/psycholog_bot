@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from source.core.schemas.assistant_schemas import AssistantResponse, ContextMessage
 
+#TODO Пересмотреть структуру интерфейсов
 
 class AssistantServiceInterface(ABC):
     @abstractmethod
