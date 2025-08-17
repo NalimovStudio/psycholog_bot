@@ -38,6 +38,10 @@ dependencies = [
     "typing-extensions (==4.14.1)"
 ]
 
+[tool.poetry]
+packages = [
+    { include = "source", from = "." }
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
