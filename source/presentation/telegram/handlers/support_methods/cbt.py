@@ -2,11 +2,18 @@ import logging
 
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
+from aiogram import Bot
 from aiogram.types import CallbackQuery, Message
+from dishka.integrations.aiogram import FromDishka
 
+from source.application.ai_assistant.ai_assistant_service import AssistantService
+from source.application.message_history.message_history_service import MessageHistoryService
+from source.core.lexicon.prompts import KPT_DIARY_PROMPT
+from source.core.schemas.assistant_schemas import ContextMessage
 from source.presentation.telegram.callbacks.method_callbacks import MethodCallback
 from source.presentation.telegram.keyboards.keyboards import get_main_keyboard
 from source.presentation.telegram.states.user_states import SupportStates
+from source.presentation.telegram.utils import send_long_message
 
 logger = logging.getLogger(__name__)
 router = Router(name=__name__)
@@ -22,7 +29,10 @@ async def handle_cbt_method(query: CallbackQuery, state: FSMContext):
 
 
 @router.message(SupportStates.CBT_S1_SITUATION)
-async def handle_cbt_s1_situation(message: Message, state: FSMContext):
+async def handle_cbt_s1_situation(message: Message, state: FSMContext, history: FromDishka[MessageHistoryService]):
+    await history.add_message_to_history(
+        message.from_user.id, "cbt", ContextMessage(role="user", message=message.text)
+    )
     await state.update_data(cbt_situation=message.text)
     await state.set_state(SupportStates.CBT_S2_EMOTIONS)
     text = "Понял. Какие эмоции ты испытал? Назови их и оцени интенсивность от 0 до 100."
@@ -30,7 +40,10 @@ async def handle_cbt_s1_situation(message: Message, state: FSMContext):
 
 
 @router.message(SupportStates.CBT_S2_EMOTIONS)
-async def handle_cbt_s2_emotions(message: Message, state: FSMContext):
+async def handle_cbt_s2_emotions(message: Message, state: FSMContext, history: FromDishka[MessageHistoryService]):
+    await history.add_message_to_history(
+        message.from_user.id, "cbt", ContextMessage(role="user", message=message.text)
+    )
     await state.update_data(cbt_emotions=message.text)
     await state.set_state(SupportStates.CBT_S3_THOUGHT)
     text = "Спасибо. Какая автоматическая мысль промелькнула у тебя в голове в тот момент?"
@@ -38,16 +51,56 @@ async def handle_cbt_s2_emotions(message: Message, state: FSMContext):
 
 
 @router.message(SupportStates.CBT_S3_THOUGHT)
-async def handle_cbt_s3_thought(message: Message, state: FSMContext):
+async def handle_cbt_s3_thought(
+        message: Message,
+        state: FSMContext,
+        assistant: FromDishka[AssistantService],
+        history: FromDishka[MessageHistoryService],
+        bot: Bot
+):
+    user_id = message.from_user.id
+    context_scope = "cbt"
     await state.update_data(cbt_thought=message.text)
     await state.set_state(SupportStates.CBT_S4_DISTORTIONS)
-    # TODO: Добавить клавиатуру для выбора когнитивных искажений
-    text = "Хорошо. А теперь подумай, были ли в этой мысли когнитивные искажения? Например, 'чтение мыслей' или 'катастрофизация'. Можешь перечислить их."
+
+    user_message = ContextMessage(role="user", message=message.text)
+    await history.add_message_to_history(user_id, context_scope, user_message)
+    
+    data = await state.get_data()
+    message_history = await history.get_history(user_id, context_scope)
+
+    cbt_prompt = KPT_DIARY_PROMPT.format(
+        situation=data.get('cbt_situation', 'не указана'),
+        emotions=data.get('cbt_emotions', 'не указаны'),
+        thought=data.get('cbt_thought', 'не указана')
+    )
+
+    try:
+        response = await assistant.get_kpt_diary_response(
+            message=message.text,
+            context_messages=message_history,
+            prompt=cbt_prompt
+        )
+        ai_response_text = response.message
+        
+        ai_message = ContextMessage(role="assistant", message=ai_response_text)
+        await history.add_message_to_history(user_id, context_scope, ai_message)
+
+        await send_long_message(message, ai_response_text, bot)
+
+    except Exception as e:
+        logger.error(f"Failed to get AI response for user {user_id} in scope {context_scope}: {e}")
+        pass
+
+    text = "Хорошо. А теперь, опираясь на сказанное, подумай, были ли в этой мысли когнитивные искажения? Например, 'чтение мыслей' или 'катастрофизация'. Можешь перечислить их."
     await message.answer(text)
 
 
 @router.message(SupportStates.CBT_S4_DISTORTIONS)
-async def handle_cbt_s4_distortions(message: Message, state: FSMContext):
+async def handle_cbt_s4_distortions(message: Message, state: FSMContext, history: FromDishka[MessageHistoryService]):
+    await history.add_message_to_history(
+        message.from_user.id, "cbt", ContextMessage(role="user", message=message.text)
+    )
     await state.update_data(cbt_distortions=message.text)
     await state.set_state(SupportStates.CBT_S5_EVIDENCE)
     text = "Принято. Какие есть доказательства, подтверждающие эту мысль? А какие — опровергающие?"
@@ -55,7 +108,10 @@ async def handle_cbt_s4_distortions(message: Message, state: FSMContext):
 
 
 @router.message(SupportStates.CBT_S5_EVIDENCE)
-async def handle_cbt_s5_evidence(message: Message, state: FSMContext):
+async def handle_cbt_s5_evidence(message: Message, state: FSMContext, history: FromDishka[MessageHistoryService]):
+    await history.add_message_to_history(
+        message.from_user.id, "cbt", ContextMessage(role="user", message=message.text)
+    )
     await state.update_data(cbt_evidence=message.text)
     await state.set_state(SupportStates.CBT_S6_ALTERNATIVE)
     text = "Отлично. А теперь попробуй сформулировать альтернативную, более сбалансированную мысль."
@@ -63,7 +119,10 @@ async def handle_cbt_s5_evidence(message: Message, state: FSMContext):
 
 
 @router.message(SupportStates.CBT_S6_ALTERNATIVE)
-async def handle_cbt_s6_alternative(message: Message, state: FSMContext):
+async def handle_cbt_s6_alternative(message: Message, state: FSMContext, history: FromDishka[MessageHistoryService]):
+    await history.add_message_to_history(
+        message.from_user.id, "cbt", ContextMessage(role="user", message=message.text)
+    )
     await state.update_data(cbt_alternative=message.text)
     await state.set_state(SupportStates.CBT_S7_RERATING)
     text = "Супер. А теперь вернемся к твоим эмоциям. Оцени их интенсивность сейчас, от 0 до 100."
@@ -71,11 +130,18 @@ async def handle_cbt_s6_alternative(message: Message, state: FSMContext):
 
 
 @router.message(SupportStates.CBT_S7_RERATING)
-async def handle_cbt_s7_rerating(message: Message, state: FSMContext):
+async def handle_cbt_s7_rerating(message: Message, state: FSMContext, history: FromDishka[MessageHistoryService]):
+    user_id = message.from_user.id
+    context_scope = "cbt"
+    await history.add_message_to_history(
+        user_id, context_scope, ContextMessage(role="user", message=message.text)
+    )
     await state.update_data(cbt_rerating=message.text)
     cbt_data = await state.get_data()
-    logger.info(f"User {message.from_user.id} finished CBT entry: {cbt_data}")
-    # TODO: Добавить логику сохранения записи в БД (через application-слой)
+    logger.info(f"User {user_id} finished CBT entry: {cbt_data}")
+    
     await state.clear()
+    await history.clear_history(user_id, context_scope)
+    
     text = "Спасибо, мы завершили запись в дневнике. Это был важный шаг. Я сохраню эту запись, если ты не против.\n\nВозвращаю тебя в главное меню."
     await message.answer(text, reply_markup=get_main_keyboard())

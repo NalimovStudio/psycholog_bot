@@ -1,0 +1,36 @@
+import json
+import re
+from aiogram import Bot
+from aiogram.types import Message
+from aiogram.utils.markdown import hbold
+
+TELEGRAM_MAX_MESSAGE_LENGTH = 4096
+
+
+async def send_long_message(message: Message, text: str, bot: Bot, keyboard=None):
+    if len(text) <= TELEGRAM_MAX_MESSAGE_LENGTH:
+        await bot.send_message(message.chat.id, text, reply_markup=keyboard, parse_mode="HTML")
+        return
+
+    parts = []
+    while len(text) > 0:
+        if len(text) > TELEGRAM_MAX_MESSAGE_LENGTH:
+            split_pos = text.rfind('\n', 0, TELEGRAM_MAX_MESSAGE_LENGTH)
+            if split_pos == -1:
+                split_pos = TELEGRAM_MAX_MESSAGE_LENGTH
+            parts.append(text[:split_pos])
+            text = text[split_pos:]
+        else:
+            parts.append(text)
+            break
+
+    for i, part in enumerate(parts):
+        current_keyboard = keyboard if i == len(parts) - 1 else None
+        await bot.send_message(message.chat.id, part, reply_markup=current_keyboard, parse_mode="HTML")
+
+
+def extract_json_from_markdown(text: str) -> str:
+    match = re.search(r'```(json)?\s*([\s\S]*?)\s*```', text)
+    if match:
+        return match.group(2).strip()
+    return text
