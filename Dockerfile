@@ -1,15 +1,21 @@
 FROM python:3.12-slim
 
+# тут создается папка с проектом (на самом высоком уровне), которая уже пихает в себя все остальные файлы
 WORKDIR /trauma_project
 
-RUN pip install --no-cache-dir --retries=5 --default-timeout=25 poetry
+ENV PYTHONPATH=/trauma_project
 
+# Устанавливаем Poetry с отключением виртуального окружения
+RUN pip install --no-cache-dir poetry && \
+    poetry config virtualenvs.create false
+
+# Копируем файлы зависимостей
 COPY pyproject.toml poetry.lock README.md ./
 
-# Добавляем --no-root
-RUN poetry install --only main --no-interaction --no-ansi
+# Устанавливаем зависимости (без текущего проекта)
+RUN poetry install --only main --no-root --no-interaction --no-ansi
 
+# Копируем весь код
 COPY . .
 
-# Используем poetry run для гарантии доступа к зависимостям
-CMD ["poetry", "run", "python", "source/main/bot.py"]
+CMD ["python", "source/main/bot.py"]

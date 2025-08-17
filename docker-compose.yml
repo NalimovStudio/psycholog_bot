@@ -28,7 +28,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./:/trauma_project  # Монтируем код бота
+      - ./:/source  # Монтируем код бота
 
 volumes:
   pg_data:
