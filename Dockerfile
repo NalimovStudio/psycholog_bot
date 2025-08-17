@@ -10,12 +10,10 @@ RUN pip install --no-cache-dir poetry && \
     poetry config virtualenvs.create false
 
 # Копируем файлы зависимостей
-COPY pyproject.toml poetry.lock README.md ./
+COPY pyproject.toml poetry.lock ./
 
 # Устанавливаем зависимости (без текущего проекта)
 RUN poetry install --only main --no-root --no-interaction --no-ansi
 
 # Копируем весь код
 COPY . .
-
-CMD ["python", "source/main/bot.py"]

@@ -21,14 +21,28 @@ services:
     build: .
     container_name: psychoAI_bot
     restart: unless-stopped
-    environment:
-      BOT_TOKEN: "7560654495:AAGnMBWuFX35VVCGWiwrCKngDnNVBYwVlIY"
-      DATABASE_URL: "postgresql+asyncpg://admin:admin@db:5432/psychoAI_db"
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
+    command: python -m source.main.bot
     volumes:
       - ./:/source  # Монтируем код бота
+  redis:
+    image: redis:7-alpine
+    restart: always
+    command: redis-server --requirepass admin
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 30s
+      retries: 5
 
 volumes:
   pg_data:
+  redis_data:
