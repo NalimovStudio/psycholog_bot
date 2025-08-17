@@ -17,6 +17,18 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  bot:
+    build: .
+    container_name: psychoAI_bot
+    restart: unless-stopped
+    environment:
+      BOT_TOKEN: "7560654495:AAGnMBWuFX35VVCGWiwrCKngDnNVBYwVlIY"
+      DATABASE_URL: "postgresql+asyncpg://admin:admin@db:5432/psychoAI_db"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./:/trauma_project  # Монтируем код бота
 
 volumes:
   pg_data:
