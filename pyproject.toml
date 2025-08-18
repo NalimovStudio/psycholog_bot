@@ -1,5 +1,5 @@
 [project]
-name = "psycholog-bot"
+name = "trauma_project"
 version = "0.1.0"
 description = ""
 authors = [
@@ -39,6 +39,10 @@ dependencies = [
     "asyncpg (>=0.30.0,<0.31.0)"
 ]
 
+[tool.poetry]
+packages = [
+    { include = "source", from = "." }
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
