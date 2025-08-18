@@ -91,13 +91,13 @@ async def handle_ps_s2_goal(
         )
 
     except (json.JSONDecodeError, TypeError, KeyError) as e:
-        logger.error(f"Failed to parse/process AI response for user {user_id} in scope {context_scope}: {e}")
+        logger.error(f"Ошибка при парсинге юзера {user_id} в скопе {context_scope}: {e}")
         await message.answer(
             "Произошла ошибка при обработке ответа. Попробуйте сформулировать проблему немного иначе."
         )
         await state.set_state(SupportStates.METHOD_SELECT)
     except Exception as e:
-        logger.error(f"An unexpected error occurred for user {user_id} in scope {context_scope}: {e}")
+        logger.error(f"Не ожидаемая ошибка для юзера {user_id} в скопе {context_scope}: {e}")
         await message.answer("Что-то пошло не так. Пожалуйста, попробуйте позже.")
         await state.clear()
         await history.clear_history(user_id, context_scope)

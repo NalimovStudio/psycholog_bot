@@ -13,8 +13,17 @@ class VentingCallback(CallbackData, prefix="vent"):
     action: str  # save, delete, to_cbt
 
 
+from typing import Optional
+
+
 class SubscriptionCallback(CallbackData, prefix="sub"):
-    action: str  # renew_discount
+    menu: str
+    sub_type: Optional[str] = None
+    months: Optional[int] = None
+
+
+class HelpCallback(CallbackData, prefix="help"):
+    menu: str
 
 
 class ProblemSolvingCallback(CallbackData, prefix="problem_solving"):

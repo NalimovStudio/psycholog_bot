@@ -4,6 +4,7 @@ from .check_in import router as check_in_router
 from .main_menu import router as main_menu_router
 from .risk_protocol import router as risk_protocol_router
 from .start import router as start_router
+from .subscription import router as subscription_router
 from .support_methods import (
     calming_router,
     cbt_router,
@@ -22,6 +23,8 @@ handlers_router.include_routers(
     start_router,
     # Навигация по главному меню (Reply-кнопки)
     main_menu_router,
+    # Обработка колбэков подписки
+    subscription_router,
     # Начальный диалог
     check_in_router,
     # Потоки поддержки

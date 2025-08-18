@@ -14,18 +14,12 @@ router = Router(name=__name__)
 
 @router.message(SupportStates.RISK_PROTOCOL)
 async def handle_risk_protocol(message: Message, state: FSMContext):
-    """
-    Обрабатывает диалог, когда у пользователя обнаружен риск.
-    Ведет пользователя по шагам протокола безопасности.
-    """
-    # Это упрощенный пошаговый протокол. В реальности потребовался бы более сложный NLP.
     current_data = await state.get_data()
     step = current_data.get("risk_step", 1)
 
     logger.warning(f"User {message.from_user.id} in RISK_PROTOCOL, step {step}. Msg: '{message.text[:30]}...'")
 
     if step == 1:
-        # Пользователь ответил на первый вопрос ("Были ли мысли?"). Задаем второй.
         await state.update_data(risk_step=2)
         text = (
             "Спасибо, что сказал мне это. Это очень серьезно, и я здесь, чтобы помочь.\n\n"
@@ -34,7 +28,6 @@ async def handle_risk_protocol(message: Message, state: FSMContext):
         await message.answer(text)
 
     elif step == 2:
-        # Пользователь ответил на второй вопрос. Предоставляем номера помощи.
         await state.update_data(risk_step=3)
         text = (
             "Пожалуйста, не оставайся с этим один. Ты можешь получить помощь прямо сейчас.\n\n"
@@ -45,7 +38,6 @@ async def handle_risk_protocol(message: Message, state: FSMContext):
         await message.answer(text)
 
     elif step == 3:
-        # Последний шаг: пытаемся заземлить пользователя и передать в поток "Успокоиться".
         await state.set_state(SupportStates.CALMING)
         text = (
             "Я остаюсь здесь, с тобой. Твоя жизнь очень важна.\n\n"
