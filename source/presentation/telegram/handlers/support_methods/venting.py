@@ -4,6 +4,7 @@ from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
+from aiogram.enums import ParseMode
 from dishka.integrations.aiogram import FromDishka
 
 from source.presentation.telegram.callbacks.method_callbacks import MethodCallback
@@ -69,7 +70,7 @@ async def handle_venting_message(
         ai_message = ContextMessage(role="assistant", message=response_text)
         await history.add_message_to_history(user_id, context_scope, ai_message)
 
-        await message.answer(response_text, parse_mode="HTML")
+        await message.answer(response_text)
     except Exception as e:
-        logger.error(f"Failed to get AI response for user {user_id} in scope {context_scope}: {e}")
+        logger.error(f"Ошибка при получение сообщения {user_id} в скопе {context_scope}: {e}")
         await message.answer("Произошла ошибка. Пожалуйста, попробуйте еще раз.")

@@ -2,10 +2,11 @@ from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove
 
+from source.core.lexicon.bot import PROFILE_TEXT, HELP_TEXT, SUBSCRIPTION_MENU_TEXT
 from source.presentation.telegram.keyboards.keyboards import (
     ButtonText,
-    get_support_methods_keyboard,
-    get_subscription_offer_keyboard,
+    get_subscriptions_menu_keyboard,
+    get_help_keyboard,
 )
 from source.presentation.telegram.states.user_states import SupportStates
 
@@ -22,23 +23,34 @@ async def handle_start_dialog(message: Message, state: FSMContext):
     await message.answer(text=text, reply_markup=ReplyKeyboardRemove())
 
 
-@router.message(F.text == ButtonText.SUPPORT_METHOD)
-async def handle_support_method(message: Message):
-    text = "Выбери, как тебе помочь сейчас:"
-    await message.answer(text=text, reply_markup=get_support_methods_keyboard())
+@router.message(F.text == ButtonText.HELP)
+async def handle_help(message: Message):
+    """
+    Обрабатывает нажатие на кнопку 'Помощь'.
+    Отправляет информационное сообщение с клавиатурой.
+    """
+    await message.answer(text=HELP_TEXT, reply_markup=get_help_keyboard())
 
 
 @router.message(F.text == ButtonText.SUBSCRIPTION)
 async def handle_subscription(message: Message):
-    """
-    Обрабатывает нажатие на кнопку 'Подписка'.
-    Показывает информацию о подписке (заглушка).
-    """
-    # Это заглушка. 
-    # Реальная логика будет проверять статус подписки пользователя.
-    text = (
-        "Сейчас у вас активна бесплатная подписка. "
-        "Часть функций (дневник, напоминания, длинные сессии) может быть ограничена.\n\n"
-        "Хотите получить полный доступ и поддержать проект?"
+    await message.answer(
+        text=SUBSCRIPTION_MENU_TEXT,
+        reply_markup=get_subscriptions_menu_keyboard()
     )
-    await message.answer(text=text, reply_markup=get_subscription_offer_keyboard())
+
+
+@router.message(F.text == ButtonText.PROFILE)
+async def handle_profile(message: Message):
+    user_id = message.from_user.id
+    username = message.from_user.username or "не указан"
+    # Заглушка для типа подписки
+    #TODO Решить заглушку
+    subscription_type = "Бесплатная"
+
+    text = PROFILE_TEXT.format(
+        user_id=user_id,
+        username=username,
+        subscription_type=subscription_type,
+    )
+    await message.answer(text=text)
