@@ -2,11 +2,12 @@ import asyncio
 from typing import AsyncGenerator
 
 import pytest
+from source.infrastructure.config import get_database_config
+from source.infrastructure.dishka import ConfigProvider
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.pool import NullPool
 
-from source.config import app_config
 from source.core.enum import SubscriptionType, UserType
 from source.core.schemas.user_schema import UserSchema
 from source.infrastructure.database.repository.user_repo import UserRepository
@@ -22,7 +23,7 @@ def event_loop():
 
 @pytest.fixture(scope="session")
 async def test_engine():
-    test_db_url = app_config.DATABASE_URL
+    test_db_url = get_database_config(env=ConfigProvider().get_env()).build_connection_url()
 
     test_engine = create_async_engine(
         test_db_url,
