@@ -51,3 +51,10 @@ class BotConfig(BaseModel):
 
 class AssistantConfig(BaseModel):
     api_key: SecretStr
+
+
+class PaymentConfig(BaseModel):
+    "Config for application YooKassa"
+
+    store_id: SecretStr
+    store_token: SecretStr

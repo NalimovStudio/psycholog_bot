@@ -10,7 +10,7 @@ requires-python = ">=3.12"
 dependencies = [
     "pydantic (==2.11.7)",
     "environs (>=14.3.0,<15.0.0)",
-    "dishka (>=1.6.0,<2.0.0)",
+    "dishka[fastapi] (>=1.6.0,<2.0.0)",
     "aiogram (>=3.21.0,<4.0.0)",
     "sqlalchemy (==2.0.43)",
     "redis (>=6.4.0,<7.0.0)",
@@ -36,7 +36,9 @@ dependencies = [
     "tqdm (==4.67.1)",
     "typing-inspection (==0.4.1)",
     "typing-extensions (==4.14.1)",
-    "asyncpg (>=0.30.0,<0.31.0)"
+    "asyncpg (>=0.30.0,<0.31.0)",
+    "fastapi (>=0.116.1,<0.117.0)",
+    "uvicorn (>=0.35.0,<0.36.0)"
 ]
 
 
