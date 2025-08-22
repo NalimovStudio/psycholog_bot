@@ -1,7 +1,7 @@
 [project]
 name = "trauma_project"
 version = "0.1.0"
-description = ""
+description = "psychologist assistant via Deepseek"
 authors = [
     {name = "reddmonchick"}
 ]
@@ -48,9 +48,17 @@ dependencies = [
 ]
 
 [tool.poetry]
+name = "trauma_project"
+version = "0.1.0"
+description = "psychologist assistant via Deepseek"
+authors = ["reddmonchick"]
+readme = "README.md"
 packages = [
     { include = "source", from = "." }
 ]
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.3.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
