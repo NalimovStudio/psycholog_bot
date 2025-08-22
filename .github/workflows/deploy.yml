@@ -1,0 +1,124 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+
+      - name: Configure Poetry
+        run: |
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+
+      - name: Install dependencies with Poetry
+        run: |
+          poetry install --with dev --no-interaction --no-ansi
+
+      - name: Run unit tests with Poetry
+        run: |
+          poetry run pytest tests/ -v --tb=short
+
+      - name: Run static code analysis with Poetry
+        run: |
+          poetry run flake8 source/ --max-line-length=120 --ignore=E501,W503
+          poetry run python -c "import source.main.bot; print('✓ Bot module imports successfully')"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: success()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Copy files to server
+        run: |
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='__pycache__' \
+            --exclude='.pytest_cache' \
+            --exclude='.env' \
+            --exclude='.venv' \
+            -e ssh ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/app/
+
+      - name: Deploy with Docker Compose
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ~/app
+            
+            # Останавливаем и обновляем контейнеры
+            docker-compose down
+            docker-compose pull
+            
+            # Пересобираем образ с обновленными зависимостями
+            docker-compose build --no-cache
+            
+            # Запускаем контейнеры
+            docker-compose up -d
+            
+            # Ждем запуска и проверяем статус
+            sleep 15
+            echo "=== Container status ==="
+            docker-compose ps
+            
+            echo "=== Recent logs ==="
+            docker-compose logs --tail=30
+          EOF
+
+      - name: Run Alembic migrations
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ~/app/TraumaBot
+            
+            echo "⏳ Waiting for database..."
+            for i in {1..10}; do
+              if docker-compose exec -T db pg_isready -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME || 'psychoAI_db' }}; then
+                echo "✅ Database is ready!"
+                break
+              fi
+              sleep 3
+            done
+            
+            echo "🚀 Running Alembic migrations..."
+            docker-compose exec -T web alembic upgrade head
+            echo "✅ Migrations completed"
+          EOF
+
+      - name: Health check after deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+            # Проверяем что контейнеры запущены
+            echo "=== Running containers ==="
+            docker-compose ps | grep -v "Exit"
+            
+            # Проверяем логи на ошибки
+            echo "=== Error check ==="
+            docker-compose logs --tail=50 | grep -i "error\|exception\|fail" || echo "✓ No errors found"
+            
+            # Проверяем здоровье сервисов
+            echo "=== Health check ==="
+            docker-compose exec -T db pg_isready -U admin -d psychoAI_db && echo "✓ PostgreSQL is healthy"
+          EOF
