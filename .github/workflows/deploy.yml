@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
-          cache: 'poetry'
+          cache: 'pip'
 
       - name: Install Poetry
         run: |
@@ -86,6 +86,25 @@ jobs:
             
             echo "=== Recent logs ==="
             docker-compose logs --tail=30
+          EOF
+
+      - name: Run Alembic migrations
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ~/app/TraumaBot
+            
+            echo "⏳ Waiting for database..."
+            for i in {1..10}; do
+              if docker-compose exec -T db pg_isready -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME || 'psychoAI_db' }}; then
+                echo "✅ Database is ready!"
+                break
+              fi
+              sleep 3
+            done
+            
+            echo "🚀 Running Alembic migrations..."
+            docker-compose exec -T web alembic upgrade head
+            echo "✅ Migrations completed"
           EOF
 
       - name: Health check after deploy
