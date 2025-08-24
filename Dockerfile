@@ -3,15 +3,15 @@ FROM python:3.12 as builder
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
         curl \
         git \
         # Add build-essential and libpq-dev here for compilation if needed by Python packages (like complile C-code)
         build-essential \
-        libpq-dev \
-    && curl -sSL https://install.python-poetry.org | python3 - \
-    && rm -rf /var/lib/apt/lists/* \
+        libpq-dev && \
+    curl -sSL https://install.python-poetry.org | python3 - && \
+    rm -rf /var/lib/apt/lists/* \
 
 RUN pip install "poetry==2.1.4"
 
@@ -44,10 +44,10 @@ ENV PYTHONPATH=/TraumaBot
 RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf && \
     echo "nameserver 1.1.1.1" >> /etc/resolv.conf \
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        libpq5 \
-        && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libpq5 && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy the created virtual environment from the builder stage
 COPY --from=builder /opt/venv /opt/venv
