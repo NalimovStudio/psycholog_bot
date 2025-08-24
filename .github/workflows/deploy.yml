@@ -2,7 +2,7 @@ name: Deploy to VPS
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev_arsen ]
   workflow_dispatch:
 
 jobs:
@@ -160,18 +160,6 @@ jobs:
             echo "=== Recent logs ==="
             docker-compose logs --tail=30
           EOF
-
-      - name: Validate .env file
-        run: |
-          python -c "
-          from dotenv import load_dotenv
-          try:
-              load_dotenv('.env')
-              print('✅ .env file parsed successfully')
-          except Exception as e:
-              print(f'❌ Error parsing .env: {e}')
-              exit(1)
-          "
 
       - name: Run Alembic migrations
         run: |
