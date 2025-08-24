@@ -3,6 +3,7 @@ from source.infrastructure.config import DatabaseConfig, get_database_config
 from source.infrastructure.config import BotConfig, get_bot_config
 from source.infrastructure.config import RedisConfig, get_redis_config
 from source.infrastructure.config import AssistantConfig, get_assistant_config
+from source.infrastructure.config import PaymentConfig, get_payment_config
 
 from environs import Env
 
@@ -25,6 +26,10 @@ class ConfigProvider(Provider):
     @provide
     def get_assistant_config(self, env: Env) -> AssistantConfig:
         return get_assistant_config(env)
+    
+    @provide
+    def get_payment_config(self, env: Env) -> PaymentConfig:
+        return get_payment_config(env)
     
     @provide
     def get_env(self) -> Env:

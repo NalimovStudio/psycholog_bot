@@ -1,4 +1,4 @@
-from .models import DatabaseConfig, BotConfig, RedisConfig, AssistantConfig
+from .models import DatabaseConfig, BotConfig, RedisConfig, AssistantConfig, PaymentConfig
 
 from environs import Env
 
@@ -29,4 +29,10 @@ def get_redis_config(env: Env) -> RedisConfig:
 def get_assistant_config(env: Env) -> AssistantConfig:
     return AssistantConfig(
         api_key=env.str("ASSISTANT_API_KEY", "")
+    )
+
+def get_payment_config(env: Env) -> PaymentConfig:
+    return PaymentConfig(
+        store_id=env.str("STORE_ID", ""),
+        store_token=env.str("STORE_TOKEN", "")
     )

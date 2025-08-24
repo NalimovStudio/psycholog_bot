@@ -45,6 +45,9 @@ config.set_main_option("sqlalchemy.url", DATABASE_URL + "?async_fallback=True")
 print(DATABASE_URL)
 
 from source.infrastructure.database.models.base_model import BaseModel
+from source.infrastructure.database.models.user_model import User  # обязательный импорт
+from source.infrastructure.database.models.payment_model import PaymentLogs  # обязательный импорт
+
 
 target_metadata = BaseModel.metadata
 

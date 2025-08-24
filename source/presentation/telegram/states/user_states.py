@@ -29,3 +29,6 @@ class SupportStates(StatesGroup):
 
     # Протокол безопасности
     RISK_PROTOCOL = State()             # Состояние при обнаружении риска
+
+    # Платежка
+    WAITING = State()  # Ожидаем выбор: почта или телефон

@@ -15,7 +15,7 @@ from source.infrastructure.database.uow import UnitOfWork
 S = TypeVar("S", bound=BaseModelSchema)
 
 
-class CreateUser(Interactor[str, S]):
+class GetUserById(Interactor[str, S]):
     def __init__(self, repository: UserRepository, uow: UnitOfWork): 
         self.repository = repository
         self.uow = uow
@@ -28,7 +28,6 @@ class CreateUser(Interactor[str, S]):
                 )
                 await self.uow.commit() 
                 return user
-            return data
         except Exception as exc:
             pass 
     

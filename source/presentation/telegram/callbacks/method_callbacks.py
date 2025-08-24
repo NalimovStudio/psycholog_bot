@@ -20,6 +20,7 @@ class SubscriptionCallback(CallbackData, prefix="sub"):
     menu: str
     sub_type: Optional[str] = None
     months: Optional[int] = None
+    price: Optional[str] = ""
 
 
 class HelpCallback(CallbackData, prefix="help"):

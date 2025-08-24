@@ -32,14 +32,22 @@ class ButtonText:
     BUY_PRO = "Купить Pro ⭐"
 
     SUB_STANDART_1_MONTH = "1 месяц/379₽"
+    SUB_STANDART_1_MONTH_PRICE = "379.00"
     SUB_STANDART_3_MONTHS = "3 месяца/1099₽"
+    SUB_STANDART_3_MONTHS_PRICE = "1099.00"
     SUB_STANDART_6_MONTHS = "6 месяцев/1999₽"
+    SUB_STANDART_6_MONTHS_PRICE = "1999.00"
     SUB_STANDART_12_MONTHS = "1 год/4399₽"
+    SUB_STANDART_12_MONTHS_PRICE = "4399.00"
 
     SUB_PRO_1_MONTH = "1 месяц/749₽"
+    SUB_PRO_1_MONTH_PRICE = "749.00"
     SUB_PRO_3_MONTHS = "3 месяца/1999₽"
-    SUB_PRO_6_MONTHS = "6 месяцец/4399₽"
+    SUB_PRO_3_MONTHS_PRICE = "1999.00"
+    SUB_PRO_6_MONTHS = "6 месяцев/4399₽"
+    SUB_PRO_6_MONTHS_PRICE = "4399.00"
     SUB_PRO_12_MONTHS = "1 год/8899₽"
+    SUB_PRO_12_MONTHS_PRICE = "8899.00"
 
 
 
@@ -203,13 +211,13 @@ def get_standard_subscription_options_keyboard() -> InlineKeyboardMarkup:
                 InlineKeyboardButton(
                     text=ButtonText.SUB_STANDART_1_MONTH,
                     callback_data=SubscriptionCallback(
-                        menu="buy", sub_type="standard", months=1
+                        menu="buy", sub_type="standard", months=1, price=ButtonText.SUB_STANDART_1_MONTH_PRICE
                     ).pack(),
                 ),
                 InlineKeyboardButton(
                     text=ButtonText.SUB_STANDART_3_MONTHS,
                     callback_data=SubscriptionCallback(
-                        menu="buy", sub_type="standard", months=3
+                        menu="buy", sub_type="standard", months=3, price=ButtonText.SUB_STANDART_3_MONTHS_PRICE
                     ).pack(),
                 ),
             ],
@@ -217,13 +225,13 @@ def get_standard_subscription_options_keyboard() -> InlineKeyboardMarkup:
                 InlineKeyboardButton(
                     text=ButtonText.SUB_STANDART_6_MONTHS,
                     callback_data=SubscriptionCallback(
-                        menu="buy", sub_type="standard", months=6
+                        menu="buy", sub_type="standard", months=6, price=ButtonText.SUB_STANDART_6_MONTHS_PRICE
                     ).pack(),
                 ),
                 InlineKeyboardButton(
                     text=ButtonText.SUB_STANDART_12_MONTHS,
                     callback_data=SubscriptionCallback(
-                        menu="buy", sub_type="standard", months=12
+                        menu="buy", sub_type="standard", months=12, price=ButtonText.SUB_STANDART_12_MONTHS_PRICE
                     ).pack(),
                 ),
             ],
@@ -244,13 +252,13 @@ def get_pro_subscription_options_keyboard() -> InlineKeyboardMarkup:
                 InlineKeyboardButton(
                     text=ButtonText.SUB_PRO_1_MONTH,
                     callback_data=SubscriptionCallback(
-                        menu="buy", sub_type="pro", months=1
+                        menu="buy", sub_type="pro", months=1, price=ButtonText.SUB_PRO_1_MONTH_PRICE
                     ).pack(),
                 ),
                 InlineKeyboardButton(
                     text=ButtonText.SUB_PRO_3_MONTHS,
                     callback_data=SubscriptionCallback(
-                        menu="buy", sub_type="pro", months=3
+                        menu="buy", sub_type="pro", months=3, price=ButtonText.SUB_PRO_3_MONTHS_PRICE
                     ).pack(),
                 ),
             ],
@@ -258,13 +266,13 @@ def get_pro_subscription_options_keyboard() -> InlineKeyboardMarkup:
                 InlineKeyboardButton(
                     text=ButtonText.SUB_PRO_6_MONTHS,
                     callback_data=SubscriptionCallback(
-                        menu="buy", sub_type="pro", months=6
+                        menu="buy", sub_type="pro", months=6, price=ButtonText.SUB_PRO_6_MONTHS_PRICE
                     ).pack(),
                 ),
                 InlineKeyboardButton(
                     text=ButtonText.SUB_PRO_12_MONTHS,
                     callback_data=SubscriptionCallback(
-                        menu="buy", sub_type="pro", months=12
+                        menu="buy", sub_type="pro", months=12, price=ButtonText.SUB_PRO_12_MONTHS_PRICE
                     ).pack(),
                 ),
             ],

@@ -1,5 +1,6 @@
 from .create import CreateUser
-#from .get_by_id import GetById
+from .get_by_id import GetUserById
 
 
-__all__ = ['CreateUser']
+__all__ = ['CreateUser',
+           'GetUserById']

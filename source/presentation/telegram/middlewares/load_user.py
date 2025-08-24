@@ -3,13 +3,16 @@ from typing import Any
 
 from dishka import AsyncContainer
 from dishka.integrations.aiogram import CONTAINER_NAME
+from source.core.schemas.user_schema import UserSchema
+
 
 from aiogram import BaseMiddleware
-from aiogram.types import TelegramObject, User
+from aiogram.types import TelegramObject
+from aiogram.types import User as TelegramUser
 
 from source.application.user import CreateUser
 from source.core.schemas.user_schema import UserSchemaRequest
-#from source.application.user.get_by_id import GetUserById
+from source.application.user.get_by_id import GetUserById
 
 
 class LoadUserMiddleware(BaseMiddleware):
@@ -23,17 +26,20 @@ class LoadUserMiddleware(BaseMiddleware):
             if data.get("event_from_user"):
                 dishka: AsyncContainer = data[CONTAINER_NAME]
                 create_user: CreateUser = await dishka.get(CreateUser)
-                aiogram_user: User = data["event_from_user"]
-                user = await create_user(
+                get_user: GetUserById = await dishka.get(GetUserById)
+                aiogram_user: TelegramUser = data["event_from_user"]
+                user: UserSchema = await create_user(
                     UserSchemaRequest(
                         telegram_id=str(aiogram_user.id),
                         username=aiogram_user.username
                     )
                 )
+                if not user:
+                    user: UserSchema = await get_user(str(aiogram_user.id))
                 data["user"] = user
                 return await handler(event, data)
         except Exception as exc:
-            pass # TODO Реализовать логику получения юзера, если он уже есть в бд ЛИБО сделать это в интерфейсе CreateUser
+            pass
             return await handler(event, data)
 
         

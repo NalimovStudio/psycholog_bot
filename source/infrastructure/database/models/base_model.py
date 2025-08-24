@@ -24,7 +24,12 @@ class BaseModel(DeclarativeBase):
         raise NotImplementedError
 
     def get_schema(self) -> S:
-        return self.schema_class.model_validate(self)
+        model_data = {}
+        for column in self.__table__.columns:
+            model_data[column.name] = getattr(self, column.name)
+            
+        # 2. Затем передаём словарь в Pydantic для валидации
+        return self.schema_class.model_validate(model_data)
 
     @classmethod
     def from_pydantic(cls: Type[M], schema: S, **kwargs: Any) -> M:
