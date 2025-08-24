@@ -17,6 +17,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - default
   redis:
     image: redis:7-alpine
     restart: always
@@ -30,6 +32,8 @@ services:
       interval: 5s
       timeout: 30s
       retries: 5
+    networks:
+      - default
   bot:
     build:
       context: .
@@ -46,6 +50,11 @@ services:
     command: python -m source.main.bot
     volumes:
       - ./:/source
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - default
   traefik:
     image: traefik:v2.9
     container_name: traefik
