@@ -19,6 +19,9 @@ services:
       retries: 5
     networks:
       - default
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
   redis:
     image: redis:7-alpine
     restart: always
@@ -34,6 +37,9 @@ services:
       retries: 5
     networks:
       - default
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
   bot:
     build:
       context: .
@@ -77,6 +83,9 @@ services:
     entrypoint: /traefik-entrypoint.sh
     networks:
       - traefik_network
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
   web:
     build:
       context: .
@@ -109,6 +118,9 @@ services:
     networks:
       - traefik_network
       - default
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
 
 volumes:
   pg_data:

@@ -47,7 +47,7 @@ RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf && \
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libpq5 \
-    && rm -rf /var/lib/apt/lists/*
+        && rm -rf /var/lib/apt/lists/*
 
 # Copy the created virtual environment from the builder stage
 COPY --from=builder /opt/venv /opt/venv
