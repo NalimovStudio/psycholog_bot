@@ -1,47 +1,46 @@
-# === BUILDER STAGE ===
+# --- BUILDER STAGE ---
 FROM python:3.12 as builder
 
-# Set environment variables for Poetry
-ENV POETRY_HOME="/opt/poetry" \
-    POETRY_VIRTUALENVS_IN_PROJECT=false \
-    POETRY_NO_INTERACTION=1 \
-    PATH="$POETRY_HOME/bin:/opt/venv/bin:$PATH"
+WORKDIR /app
 
-# Install Poetry and its dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         curl \
         git \
-        # Add build-essential and libpq-dev here for compilation if needed by Python packages
+        # Add build-essential and libpq-dev here for compilation if needed by Python packages (like complile C-code)
         build-essential \
         libpq-dev \
     && curl -sSL https://install.python-poetry.org | python3 - \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
 
-# Create a virtual environment
-RUN python3 -m venv /opt/venv
+RUN pip install "poetry==2.1.4"
 
-# Copy poetry.lock and pyproject.toml to leverage Docker cache
-WORKDIR /app
+# Copy only the Poetry configuration files first
+# This allows Docker to cache this layer if pyproject.toml and poetry.lock don't change
 COPY pyproject.toml poetry.lock ./
 
-# Install project dependencies into the virtual environment
-# Use --no-root to install only dependencies, not the project itself yet
-RUN poetry install --no-root --only main
+RUN poetry install --no-root
 
-# Export runtime dependencies to requirements.txt (optional, but good for clarity)
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --only main
+# Export dependencies to a requirements.txt file
+# --only main ensures only main dependencies are included (no dev)
+# --without-hashes is often needed for compatibility with pip in Docker,
+# though using hashes is more secure if you can manage it.
+RUN poetry self add poetry-plugin-export
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
 
-# === FINAL STAGE ===
+# Create a virtual environment and install dependencies into it
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+# --- FINAL STAGE ---
 FROM python:3.12-slim
 
-# Set environment variables for the application
-ENV VIRTUAL_ENV="/opt/venv" \
-    PATH="/opt/venv/bin:$PATH" \
-    PYTHONUNBUFFERED=1
+WORKDIR /TraumaBot
+ENV PYTHONPATH=/TraumaBot
 
-# Install runtime system dependencies
-# Only install libpq5 for PostgreSQL runtime library
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libpq5 \
@@ -49,14 +48,9 @@ RUN apt-get update \
 
 # Copy the created virtual environment from the builder stage
 COPY --from=builder /opt/venv /opt/venv
+# Set environment variables for the virtual environment
+ENV PATH="/opt/venv/bin:$PATH"
+ENV VIRTUAL_ENV="/opt/venv"
 
-# Copy your application code
-WORKDIR /app
 COPY . .
-
-# Set the entry point or command to run your application
-# For example, if you have a main.py:
-# CMD ["python", "main.py"]
-# Or if you use uvicorn/gunicorn:
-# CMD ["uvicorn", "your_app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-# Replace with your actual startup command
+RUN chmod +x traefik-entrypoint.sh
