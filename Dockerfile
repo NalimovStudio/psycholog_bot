@@ -3,10 +3,10 @@ FROM python:3.12-slim
 WORKDIR /app
 ENV PYTHONPATH=/app
 
-# Устанавливаем системные зависимости
+# Устанавливаем системные зависимости (используем правильное имя пакета)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    libpq5 \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Устанавливаем Poetry
@@ -28,5 +28,4 @@ RUN chmod +x traefik-entrypoint.sh
 RUN ln -sf /app /TraumaBot && \
     ln -sf /app /source
 
-# Команда по умолчанию
 CMD ["poetry", "run", "python", "-m", "source.main.bot"]
