@@ -3,15 +3,14 @@ FROM python:3.12 AS builder
 
 WORKDIR /app
 
-RUN apt-get update && \
+RUN sed -i 's/deb.debian.org/ftp.debian.org/g' /etc/apt/sources.list && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         curl \
         git \
-        # Add build-essential and libpq-dev here for compilation if needed by Python packages (like complile C-code)
         build-essential \
         libpq-dev && \
-    curl -sSL https://install.python-poetry.org | python3 - && \
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf /var/lib/apt/lists/*
 
 RUN pip install "poetry>=2.1.4"
 
@@ -41,7 +40,7 @@ FROM python:3.12-slim
 WORKDIR /TraumaBot
 ENV PYTHONPATH=/TraumaBot
 
-RUN echo "deb http://deb.debian.org/debian bookworm main" > /etc/apt/sources.list && \
+RUN sed -i 's/deb.debian.org/ftp.debian.org/g' /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         libpq5 && \
