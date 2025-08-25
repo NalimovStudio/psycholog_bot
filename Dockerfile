@@ -3,20 +3,7 @@ FROM python:3.12 AS builder
 
 WORKDIR /app
 
-# Создание sources.list с зеркалом ftp.debian.org
-RUN echo "deb http://ftp.debian.org/debian bookworm main" > /etc/apt/sources.list && \
-    echo "deb http://ftp.debian.org/debian bookworm-updates main" >> /etc/apt/sources.list && \
-    echo "deb http://security.debian.org/debian-security bookworm-security main" >> /etc/apt/sources.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        curl \
-        git \
-        build-essential \
-        libpq-dev && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN curl -sSL https://install.python-poetry.org | python3 - && \
-    ln -s /root/.local/bin/poetry /usr/local/bin/poetry
+RUN pip install --no-cache-dir poetry==2.1.4
 
 COPY pyproject.toml poetry.lock ./
 
@@ -35,16 +22,6 @@ FROM python:3.12-slim
 
 WORKDIR /TraumaBot
 ENV PYTHONPATH=/TraumaBot
-
-# Создание sources.list с зеркалом ftp.debian.org
-RUN echo "deb http://ftp.debian.org/debian bookworm main" > /etc/apt/sources.list && \
-    echo "deb http://ftp.debian.org/debian bookworm-updates main" >> /etc/apt/sources.list && \
-    echo "deb http://security.debian.org/debian-security bookworm-security main" >> /etc/apt/sources.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        libpq5 && \
-    rm -rf /var/lib/apt/lists/*
-
 
 # Copy the created virtual environment from the builder stage
 COPY --from=builder /opt/venv /opt/venv
