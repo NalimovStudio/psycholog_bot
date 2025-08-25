@@ -1,35 +1,32 @@
-# --- BUILDER STAGE ---
-FROM python:3.12 AS builder
-
-WORKDIR /app
-
-RUN pip install --no-cache-dir poetry>=2.1.4
-
-COPY pyproject.toml poetry.lock ./
-
-RUN poetry install --no-root
-
-RUN poetry self add poetry-plugin-export && \
-    poetry export -f requirements.txt --output requirements.txt --without-hashes
-
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-# --- FINAL STAGE ---
 FROM python:3.12-slim
 
-WORKDIR /TraumaBot
-ENV PYTHONPATH=/TraumaBot
+WORKDIR /app
+ENV PYTHONPATH=/app
 
-# Copy the created virtual environment from the builder stage
-COPY --from=builder /opt/venv /opt/venv
-# Set environment variables for the virtual environment
-ENV PATH="/opt/venv/bin:$PATH"
-ENV VIRTUAL_ENV="/opt/venv"
+# Устанавливаем системные зависимости
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libpq5 \
+    && rm -rf /var/lib/apt/lists/*
 
+# Устанавливаем Poetry
+RUN pip install --no-cache-dir poetry>=2.1.4
+
+# Копируем зависимости
+COPY pyproject.toml poetry.lock ./
+
+# Устанавливаем зависимости Python
+RUN poetry install --no-interaction --no-root
+
+# Копируем весь код
 COPY . .
 
-COPY traefik-entrypoint.sh /traefik-entrypoint.sh
-RUN chmod +x /traefik-entrypoint.sh
+# Делаем скрипт исполняемым
+RUN chmod +x traefik-entrypoint.sh
+
+# Создаем симлинки для обратной совместимости
+RUN ln -sf /app /TraumaBot && \
+    ln -sf /app /source
+
+# Команда по умолчанию
+CMD ["poetry", "run", "python", "-m", "source.main.bot"]
