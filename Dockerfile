@@ -13,7 +13,7 @@ RUN apt-get update && \
     curl -sSL https://install.python-poetry.org | python3 - && \
     rm -rf /var/lib/apt/lists/* \
 
-RUN pip install "poetry==2.1.4"
+RUN pip install "poetry>=2.1.4"
 
 # Copy only the Poetry configuration files first
 # This allows Docker to cache this layer if pyproject.toml and poetry.lock don't change

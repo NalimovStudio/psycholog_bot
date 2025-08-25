@@ -5,9 +5,9 @@ services:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_DB: ${ DB_PATH }
-      POSTGRES_USER: $ { DB_USER }
-      POSTGRES_PASSWORD: ${ DB_PASSWORD }
+      POSTGRES_DB: ${DB_PATH}
+      POSTGRES_USER: $ {DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "0.0.0.0:1488:5432"
     volumes:
@@ -18,6 +18,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
+      - traefik_network
       - default
     dns:
       - 8.8.8.8
@@ -36,6 +37,7 @@ services:
       timeout: 30s
       retries: 5
     networks:
+      - traefik_network
       - default
     dns:
       - 8.8.8.8
@@ -60,6 +62,7 @@ services:
       - 8.8.8.8
       - 1.1.1.1
     networks:
+      - traefik_network
       - default
   traefik:
     image: traefik:v2.9
