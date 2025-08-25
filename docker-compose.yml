@@ -80,6 +80,9 @@ services:
       - 8.8.8.8
       - 1.1.1.1
   bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: trauma_image:latest
     container_name: psychoAI_bot
     restart: unless-stopped
