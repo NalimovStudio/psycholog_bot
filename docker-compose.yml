@@ -83,6 +83,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik_acme:/acme
+      - ./traefik-entrypoint.sh:/traefik-entrypoint.sh
     entrypoint: /traefik-entrypoint.sh
     networks:
       - traefik_network
