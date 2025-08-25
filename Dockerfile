@@ -41,10 +41,11 @@ FROM python:3.12-slim
 WORKDIR /TraumaBot
 ENV PYTHONPATH=/TraumaBot
 
-RUN apt-get update && \
+RUN echo "deb http://deb.debian.org/debian bookworm main" > /etc/apt/sources.list && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         libpq5 && \
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf /var/lib/apt/lists/*
 
 
 # Copy the created virtual environment from the builder stage
