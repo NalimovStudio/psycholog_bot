@@ -91,8 +91,6 @@ services:
       - 8.8.8.8
       - 1.1.1.1
   web:
-    build:
-      context: .
     container_name: psychoAI_web
     restart: unless-stopped
     labels:
