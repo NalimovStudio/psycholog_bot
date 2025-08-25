@@ -46,6 +46,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    network_mode: host
     image: trauma_image:latest
     container_name: psychoAI_web
     restart: unless-stopped

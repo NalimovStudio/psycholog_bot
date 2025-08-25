@@ -3,7 +3,7 @@ FROM python:3.12 AS builder
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir poetry==2.1.4
+RUN pip install --no-cache-dir poetry>=2.1.4
 
 COPY pyproject.toml poetry.lock ./
 
