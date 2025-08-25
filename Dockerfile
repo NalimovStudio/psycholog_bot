@@ -3,7 +3,10 @@ FROM python:3.12 AS builder
 
 WORKDIR /app
 
-RUN sed -i 's/deb.debian.org/ftp.debian.org/g' /etc/apt/sources.list && \
+# Создание sources.list с зеркалом ftp.debian.org
+RUN echo "deb http://ftp.debian.org/debian bookworm main" > /etc/apt/sources.list && \
+    echo "deb http://ftp.debian.org/debian bookworm-updates main" >> /etc/apt/sources.list && \
+    echo "deb http://security.debian.org/debian-security bookworm-security main" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         curl \
@@ -12,27 +15,20 @@ RUN sed -i 's/deb.debian.org/ftp.debian.org/g' /etc/apt/sources.list && \
         libpq-dev && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install "poetry>=2.1.4"
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    ln -s /root/.local/bin/poetry /usr/local/bin/poetry
 
-# Copy only the Poetry configuration files first
-# This allows Docker to cache this layer if pyproject.toml and poetry.lock don't change
 COPY pyproject.toml poetry.lock ./
 
 RUN poetry install --no-root
 
-# Export dependencies to a requirements.txt file
-# --only main ensures only main dependencies are included (no dev)
-# --without-hashes is often needed for compatibility with pip in Docker,
-# though using hashes is more secure if you can manage it.
-RUN poetry self add poetry-plugin-export
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
+RUN poetry self add poetry-plugin-export && \
+    poetry export -f requirements.txt --output requirements.txt --without-hashes
 
-# Create a virtual environment and install dependencies into it
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 RUN pip install --no-cache-dir -r requirements.txt
-
 
 # --- FINAL STAGE ---
 FROM python:3.12-slim
@@ -40,7 +36,10 @@ FROM python:3.12-slim
 WORKDIR /TraumaBot
 ENV PYTHONPATH=/TraumaBot
 
-RUN sed -i 's/deb.debian.org/ftp.debian.org/g' /etc/apt/sources.list && \
+# Создание sources.list с зеркалом ftp.debian.org
+RUN echo "deb http://ftp.debian.org/debian bookworm main" > /etc/apt/sources.list && \
+    echo "deb http://ftp.debian.org/debian bookworm-updates main" >> /etc/apt/sources.list && \
+    echo "deb http://security.debian.org/debian-security bookworm-security main" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         libpq5 && \
@@ -55,6 +54,5 @@ ENV VIRTUAL_ENV="/opt/venv"
 
 COPY . .
 
-RUN ls -la /traefik-entrypoint.sh
-
-RUN chmod +x traefik-entrypoint.sh
+COPY traefik-entrypoint.sh /traefik-entrypoint.sh
+RUN chmod +x /traefik-entrypoint.sh
