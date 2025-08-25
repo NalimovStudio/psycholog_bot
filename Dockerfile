@@ -1,5 +1,5 @@
 # --- BUILDER STAGE ---
-FROM python:3.12 as builder
+FROM python:3.12 AS builder
 
 WORKDIR /app
 
@@ -41,10 +41,14 @@ FROM python:3.12-slim
 WORKDIR /TraumaBot
 ENV PYTHONPATH=/TraumaBot
 
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf && \
+    echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         libpq5 && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
+
 
 # Copy the created virtual environment from the builder stage
 COPY --from=builder /opt/venv /opt/venv
